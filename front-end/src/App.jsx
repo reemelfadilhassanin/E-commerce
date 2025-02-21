@@ -1,6 +1,6 @@
 const App = () => {
   return(
-    <div>Hi man </div>
+    <div>code nexus </div>
   )
 }
 
