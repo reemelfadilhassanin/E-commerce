@@ -1,7 +1,7 @@
 const App = () => {
   return(
-    <div>code nexus </div>
+    <div className="text-red-500">code nexus </div>
   )
-}
+} 
 
 export default App
