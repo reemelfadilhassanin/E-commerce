@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import chalk from 'chalk';
 import cors from 'cors';
+import path from 'path';
 import userRoute from './routes/user.js';
 import authRoute from './routes/auth.js';
 import productRoute from './routes/product.js';
@@ -45,7 +46,16 @@ app.use('/api/products', productRoute);
 app.use('/api/carts', cartRoute);
 app.use('/api/orders', orderRoute);
 
-//app.use('/api/checkout', stripeRoute);
+// Serve frontend build files
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+  // Serve index.html for all routes that do not match API routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+  });
+}
 
 // Test route
 app.get('/', (req, res) => {
@@ -56,3 +66,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(chalk.blue(`Server running at http://localhost:${PORT}`));
 });
+
