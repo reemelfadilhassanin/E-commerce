@@ -16,6 +16,23 @@ function validatePassword(password) {
     return reg.test(password);
 }
 
+function validateName(name) {
+    const reg = /^[a-zA-Z][a-zA-Z0-9._-]{2,9}$/;
+    return reg.test(name);
+}
+
+export const ValidateName = (name) => {
+    if (validateName(name)) {
+        return { isValid: true, error: "" };
+    } else {
+        return {
+            isValid: false,
+            error: "يجب أن يبدأ اسم المستخدم بحرف، ويمكن أن يحتوي فقط على الأحرف، الأرقام، والرموز - _ . بحد أقصى 10 أحرف.",
+        };
+    }
+};
+
+
 export const ValidatePassword = (password) => {
     if (validatePassword(password)) {
         return { isValid: true,error:'' };
