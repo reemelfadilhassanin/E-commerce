@@ -93,11 +93,11 @@ app.use('/api/orders', orderRoute);
 // Serve frontend build files (for production)
 if (process.env.NODE_ENV === 'production') {
   // Set static folder to the 'frontend/build' directory
-  app.use(express.static(path.join(__dirname, 'front-end/build')));
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
 
   // Serve index.html for all non-API routes (front-end routes)
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
   });
 }
 
@@ -105,11 +105,13 @@ if (process.env.NODE_ENV === 'production') {
 app.get('/test', (req, res) => {
   res.send('API is running');
 });
-app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend's URL
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: true, // If you're using cookies for sessions or JWT
-}));
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Allow requests from your frontend's URL
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true, // If you're using cookies for sessions or JWT
+  })
+);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

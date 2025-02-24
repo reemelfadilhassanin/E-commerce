@@ -28,21 +28,28 @@ const generateOtp = () => {
 };
 
 // Google login route (added to provide the Google login option)
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get(
+  '/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
 
 // Google login callback route (the route where Google will redirect after successful authentication)
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
-  // After successful login, you can send a JWT or user data.
-  // For example, you might want to issue a JWT as well:
-  const accessToken = jwt.sign(
-    { id: req.user._id, isAdmin: req.user.isAdmin },
-    process.env.JWT_SEC,
-    { expiresIn: '3d' }
-  );
-  // Send back the user data along with the access token
-  const { password, ...others } = req.user._doc; // Exclude password from response
-  res.status(200).json({ ...others, accessToken });
-});
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    // After successful login, you can send a JWT or user data.
+    // For example, you might want to issue a JWT as well:
+    const accessToken = jwt.sign(
+      { id: req.user._id, isAdmin: req.user.isAdmin },
+      process.env.JWT_SEC,
+      { expiresIn: '3d' }
+    );
+    // Send back the user data along with the access token
+    const { password, ...others } = req.user._doc; // Exclude password from response
+    res.status(200).json({ ...others, accessToken });
+  }
+);
 // Register route
 router.post('/register', async (req, res) => {
   const { username, email, password, isAdmin } = req.body; // Allow isAdmin from the body
