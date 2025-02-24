@@ -1,4 +1,5 @@
 import express from 'express';
+
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import chalk from 'chalk';
@@ -9,21 +10,64 @@ import authRoute from './routes/auth.js';
 import productRoute from './routes/product.js';
 import cartRoute from './routes/cart.js';
 import orderRoute from './routes/order.js';
-//import stripeRoute from './routes/stripe.js';
+import User from './models/User.js'; // Import User model
+
+import passport from 'passport';
+import session from 'express-session';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 dotenv.config();
 
 const app = express();
 
-// Connect to MongoDB
+// Passport Google OAuth Strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: 'http://localhost:5000/api/auth/google/callback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await User.findOne({ email: profile.emails[0].value });
+
+        if (!user) {
+          user = new User({
+            username: profile.displayName,
+            email: profile.emails[0].value,
+            googleId: profile.id,
+            isAdmin: false,
+          });
+          await user.save();
+        }
+
+        return done(null, user);
+      } catch (error) {
+        return done(error, false);
+      }
+    }
+  )
+);
+app.use(passport.initialize());
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
+
+// MongoDB connection
 const connectDB = async () => {
   try {
     const mongoURI =
       process.env.MONGO_URI || 'mongodb://localhost:27017/ecommerce';
-    const connection = await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const connection = await mongoose.connect(mongoURI);
     console.log(
       chalk.green(`MongoDB Connected: ${connection.connection.host}`)
     );
@@ -46,24 +90,28 @@ app.use('/api/products', productRoute);
 app.use('/api/carts', cartRoute);
 app.use('/api/orders', orderRoute);
 
-// Serve frontend build files
+// Serve frontend build files (for production)
 if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static(path.join(__dirname, 'frontend/build')));
+  // Set static folder to the 'frontend/build' directory
+  app.use(express.static(path.join(__dirname, 'front-end/build')));
 
-  // Serve index.html for all routes that do not match API routes
+  // Serve index.html for all non-API routes (front-end routes)
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
   });
 }
 
 // Test route
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
   res.send('API is running');
 });
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow requests from your frontend's URL
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true, // If you're using cookies for sessions or JWT
+}));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(chalk.blue(`Server running at http://localhost:${PORT}`));
 });
-

@@ -1,6 +1,6 @@
 export const signIn = async (userData) => {
     try {
-      const res = await fetch("https://api.example.com/login", {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js'; // Assuming this is in ES Module format as well
 import nodemailer from 'nodemailer';
 import Otp from '../models/Otp.js'; // Import the Otp model
-
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 const router = express.Router();
 
 // Create a transporter for sending OTP emails
@@ -16,9 +17,8 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER, // your email
     pass: process.env.EMAIL_PASS, // your email password or app password
   },
-
   tls: {
-    rejectUnauthorized: false, // This will disable the SSL certificate verification (use with caution)
+    rejectUnauthorized: false, // Disable SSL certificate verification (use with caution)
   },
 });
 
@@ -27,6 +27,22 @@ const generateOtp = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
+// Google login route (added to provide the Google login option)
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Google login callback route (the route where Google will redirect after successful authentication)
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+  // After successful login, you can send a JWT or user data.
+  // For example, you might want to issue a JWT as well:
+  const accessToken = jwt.sign(
+    { id: req.user._id, isAdmin: req.user.isAdmin },
+    process.env.JWT_SEC,
+    { expiresIn: '3d' }
+  );
+  // Send back the user data along with the access token
+  const { password, ...others } = req.user._doc; // Exclude password from response
+  res.status(200).json({ ...others, accessToken });
+});
 // Register route
 router.post('/register', async (req, res) => {
   const { username, email, password, isAdmin } = req.body; // Allow isAdmin from the body
@@ -37,12 +53,11 @@ router.post('/register', async (req, res) => {
       .json('All fields (username, email, password) are required.');
   }
 
-  // If the username is 'admin', force set isAdmin to true (you can also set this conditionally based on the request)
   const newUser = new User({
     username,
     email,
     password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString(),
-    isAdmin: username === 'admin' ? true : isAdmin || false, // Default to false or set based on the input
+    isAdmin: username === 'admin' ? true : isAdmin || false,
   });
 
   try {
@@ -58,17 +73,18 @@ router.post('/register', async (req, res) => {
 });
 
 // Login route - Enable login with username and password
+// Login route - Enable login with email and password
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body; // Change 'email' to 'username'
+  const { email, password } = req.body; // Change from username to email
 
-  if (!username || !password) {
-    return res.status(400).json('Both username and password are required.');
+  if (!email || !password) {
+    return res.status(400).json('Both email and password are required.');
   }
 
   try {
-    const user = await User.findOne({ username }); // Check by username instead of email
+    const user = await User.findOne({ email }); // Find by email, not username
     if (!user) {
-      return res.status(401).json('Wrong username or password.');
+      return res.status(401).json('Wrong email or password.');
     }
 
     const hashedPassword = CryptoJS.AES.decrypt(
@@ -82,10 +98,7 @@ router.post('/login', async (req, res) => {
     }
 
     const accessToken = jwt.sign(
-      {
-        id: user._id,
-        isAdmin: user.isAdmin,
-      },
+      { id: user._id, isAdmin: user.isAdmin },
       process.env.JWT_SEC,
       { expiresIn: '3d' }
     );
@@ -115,27 +128,19 @@ router.post('/forgot-password', async (req, res) => {
       return res.status(404).json('User not found.');
     }
 
-    // Generate OTP
     const otp = generateOtp();
 
-    // Check if OTP already exists for the email
     let otpRecord = await Otp.findOne({ email });
 
     if (otpRecord) {
-      // Update the OTP if it already exists
       otpRecord.otp = otp;
-      otpRecord.createdAt = new Date(); // Update the timestamp
+      otpRecord.createdAt = new Date();
       await otpRecord.save();
     } else {
-      // If no OTP record exists, create a new one
-      otpRecord = new Otp({
-        email,
-        otp,
-      });
+      otpRecord = new Otp({ email, otp });
       await otpRecord.save();
     }
 
-    // Send OTP to the user's email
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -169,26 +174,23 @@ router.post('/verify-otp', async (req, res) => {
   }
 
   try {
-    const otpRecord = await Otp.findOne({ email }).sort({ createdAt: -1 }); // Get the latest OTP record for this email
+    const otpRecord = await Otp.findOne({ email }).sort({ createdAt: -1 });
 
     if (!otpRecord) {
       return res.status(400).json('OTP not found or expired.');
     }
 
-    // Check if the OTP is expired (e.g., 10 minutes)
     const isExpired =
-      new Date() - new Date(otpRecord.createdAt) > 10 * 60 * 1000; // 10 minutes in milliseconds
+      new Date() - new Date(otpRecord.createdAt) > 10 * 60 * 1000;
 
     if (isExpired) {
       return res.status(400).json('OTP expired. Please request a new one.');
     }
 
-    // Check if the OTP matches
     if (otpRecord.otp !== otp) {
       return res.status(400).json('Invalid OTP.');
     }
 
-    // OTP is valid and not expired, allow user to reset the password
     res.status(200).json('OTP verified. You can now reset your password.');
   } catch (err) {
     console.error(err);
@@ -213,17 +215,14 @@ router.post('/reset-password', async (req, res) => {
       return res.status(404).json('User not found.');
     }
 
-    // Encrypt the new password before saving
     const encryptedPassword = CryptoJS.AES.encrypt(
       newPassword,
       process.env.PASS_SEC
     ).toString();
 
-    // Update the user's password
     user.password = encryptedPassword;
     await user.save();
 
-    // Remove the OTP from the database (optional, depending on your use case)
     await Otp.deleteOne({ email });
 
     res.status(200).json('Password has been successfully reset.');
@@ -236,5 +235,5 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
-// Use export default to match ES Module import
+// Export the router as default
 export default router;

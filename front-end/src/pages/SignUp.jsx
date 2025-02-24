@@ -16,7 +16,7 @@ function SignUp() {
   const [show, setShow] = useState(false);
   const [disable, setDisable] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    username: "", // Changed from 'name' to 'username'
     email: "",
     password: "",
     passwordVerifier: "",
@@ -34,7 +34,7 @@ function SignUp() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: value, // This will now update 'username', 'email', etc.
     }));
   };
 
@@ -52,7 +52,8 @@ function SignUp() {
     e.preventDefault();
     setDisable(!disable);
 
-    const validateName = ValidateName(formData.name);
+    // Validate fields
+    const validateName = ValidateName(formData.username); // Changed from 'name' to 'username'
     if (!validateName.isValid) {
       setValidateName(validateName.error);
       return;
@@ -70,12 +71,13 @@ function SignUp() {
       return;
     }
 
-    if (formData.password != formData.passwordVerifier) {
+    if (formData.password !== formData.passwordVerifier) {
       setValidatePassword(
         "يبدو أن كلمة المرور وتأكيدها غير متطابقين، يرجى المحاولة مرة أخرى."
       );
       return;
     }
+    
     resetInputs();
     mutate(formData);
     if (success) {
@@ -93,32 +95,33 @@ function SignUp() {
         </>
       }
       <BgAuth Bg={signup} />
-      <div className=" absolute z-10 w-[500px] h-fit bg-white top-[50%] translate-[-50%] left-[60%] rounded-md py-8 px-18 max-sm:px-8 max-md:left-[50%] max-md:translate-x-[-50%] max-sm:w-[360px] shadow-xl   border-[.1px] border-[#DFDFDF]">
-        <div className=" relative flex justify-center items-center gap-4">
+      <div className="absolute z-10 w-[500px] h-fit bg-white top-[50%] translate-[-50%] left-[60%] rounded-md py-8 px-18 max-sm:px-8 max-md:left-[50%] max-md:translate-x-[-50%] max-sm:w-[360px] shadow-xl border-[.1px] border-[#DFDFDF]">
+        <div className="relative flex justify-center items-center gap-4">
           <div className="w-[50px] h-[50px] rotate-45 left-[56%] max-sm:left-[57%] bg-[#7F28811A] rounded-xl absolute"></div>
-          <i className="fa-solid fa-shop text-2xl  text-[#7F2881]"></i>
+          <i className="fa-solid fa-shop text-2xl text-[#7F2881]"></i>
           <p className="font-almarai">سوق-بلس </p>
         </div>
         <form
-          className="flex flex-col  gap-4 mt-8"
-          onSubmit={(e) => {
-            submitHandler(e);
-          }}
+          className="flex flex-col gap-4 mt-8"
+          onSubmit={(e) => submitHandler(e)}
         >
+          {/* Username */}
           <div>
             <label className="text-sm font-almarai">الاسم</label>
             <input
               type="text"
               className="bg-[#F8F8F8] border-[0.5px] rounded-md border-[#DFDFDF] p-2 w-full focus:outline-[#7F2881] mt-1"
               placeholder="أدخل الاسم الكامل"
-              name="name"
-              value={formData.name}
+              name="username"  // Changed from 'name' to 'username'
+              value={formData.username}  // Ensure you're using 'username' here
               onChange={handleInputChange}
             />
             {validateName && (
               <div className="text-red-400 text-sm mt-1">{validateName}</div>
             )}
           </div>
+
+          {/* Email */}
           <div>
             <div>
               <label className="text-sm font-almarai">البريد الألكتروني</label>
@@ -135,6 +138,8 @@ function SignUp() {
               )}
             </div>
           </div>
+
+          {/* Password */}
           <div>
             <label className="text-sm font-almarai">كلمة المرور</label>
             <div className="relative mt-1">
@@ -159,6 +164,8 @@ function SignUp() {
               )}
             </div>
           </div>
+
+          {/* Password Verification */}
           <div>
             <label className="text-sm font-almarai">تأكيد كلمة المرور</label>
             <div className="relative mt-1">
@@ -190,6 +197,7 @@ function SignUp() {
             <p className="text-sm mt-1 text-[#7F2881]">نسيت كلمة المرور؟</p>
           </div>
 
+          {/* Submit Button */}
           <input
             type="submit"
             className="font-almarai bg-[#7F2881] p-2 text-white rounded-md mt-10 cursor-pointer"
@@ -197,6 +205,8 @@ function SignUp() {
             disabled={disable}
           />
         </form>
+
+        {/* Social Media Signup */}
         <div className="flex justify-center items-center w-full mt-10">
           <div className="flex-1 bg-[#DFDFDF] h-[1px]"></div>
           <p className="text-[#636B6A] text-sm px-4">أو التسجيل من خلال</p>
@@ -217,6 +227,8 @@ function SignUp() {
             <img src={facebook} alt="signWithFacebook" />
           </div>
         </div>
+
+        {/* Login Link */}
         <div className="flex justify-center items-center text-sm mt-4">
           <p> لديك حساب؟</p>
           <Link to="/signin" className="text-[#7F2881]" disabled={disable}>
