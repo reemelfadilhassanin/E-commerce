@@ -7,13 +7,11 @@ import {
   Google,
   facebook,
 } from "../../public/Assets/exporting";
-
 import { UseSignIn } from "../components/hooks/UseSignIn";
 import {
   ValidateEmail,
   ValidatePassword,
 } from "../components/hooks/useValidationEmail";
-
 import UseLoading from '../components/ui/useLoading';
 import UseError from '../components/ui/useError';
 import UseSuccess from '../components/ui/useSuccess';
@@ -35,7 +33,7 @@ function SignIn() {
     setShow(!show);
   };
 
-  const { mutate, isLoading, isError } = UseSignIn({
+  const { mutate, isLoading, isError,error } = UseSignIn({
     onSuccess: () => setSuccess(true),
   });
 
@@ -62,12 +60,12 @@ function SignIn() {
       return;
     }
 
-    // mutate(formData);
-    // if(Success){
+    mutate(formData);
+    if(Success){
       dispatch(signIn(formData.email))
       console.log(email)
       console.log(role)
-    // }
+    }
   };
 
  
@@ -76,8 +74,8 @@ function SignIn() {
       {
         <>
           {isLoading && <UseLoading/>}
-          {Success && <UseSuccess/>}
-          {isError && <UseError/>}
+          {Success && <UseSuccess signworld="تسجيل دخولك"/>}
+          {isError && <UseError error={error}/>}
         </>
       }
       {/* الخطوط */}
@@ -104,7 +102,7 @@ function SignIn() {
         </div>
       </div>
       {/* the form */}
-      <div className=" absolute z-10 w-[500px] h-fit bg-white top-[50%] translate-[-50%] left-[60%] rounded-md py-8 px-18 max-sm:px-8 max-md:left-[50%] max-md:translate-x-[-50%] max-sm:w-[360px] shadow-xl  ">
+      <div className=" absolute z-10 w-[500px] h-fit bg-white top-[50%] translate-[-50%] left-[60%] rounded-md py-8 px-18 max-sm:px-8 max-md:left-[50%] max-md:translate-x-[-50%] max-sm:w-[360px] shadow-xl   border-[.1px] border-[#DFDFDF]">
         <div className="flex justify-center items-center gap-4">
           <i className="fa-solid fa-shop text-2xl  text-[#7F2881]"></i>
           <p className="font-almarai">سوق-بلس </p>
@@ -168,7 +166,7 @@ function SignIn() {
         </form>
         <div className="flex justify-center items-center w-full mt-10">
           <div className="flex-1 bg-[#DFDFDF] h-[1px]"></div>
-          <p className="text-[#636B6A] text-sm px-4">أو التسجيل من خلال</p>
+          <p className="text-[#636B6A] text-sm px-4">أو تسجيل الدخول من خلال</p>
           <div className="flex-1 bg-[#DFDFDF] h-[1px]"></div>
         </div>
 

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router";
 import {checked} from "../../../public/Assets/exporting"
-const SuccessHandler = () => {
+const SuccessHandler = ({signworld}) => {
     const navigate = useNavigate()
     setTimeout(() => {
-      navigate("/");
+      navigate("/", { replace: true });
     }, 3000);
     return (
       <div className="w-screen h-screen fixed top-0 left-0 bg-[#0002] z-[1000000] flex justify-center items-center">
@@ -12,7 +12,7 @@ const SuccessHandler = () => {
             <img src={checked} alt="check" className="w-[5rem] " />
           </div>
           <div className="text-center">
-            <h1>تم تسجيل دخولك بنجاح</h1>
+            <h1>تم {signworld} بنجاح</h1>
             <p>يمكنك الان استخدام التطبيق بحرية</p>
           </div>
         </div>
