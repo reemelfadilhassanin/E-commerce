@@ -1,8 +1,9 @@
 const signUp = async (userData) => {
+
   try{
     const res = await fetch("api.link",{
       method:"POST",
-      header:{
+      headers:{
         "Content-Type":"application/json"
       },
       body:JSON.stringify(userData),
