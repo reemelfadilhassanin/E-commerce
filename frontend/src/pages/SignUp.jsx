@@ -16,7 +16,7 @@ function SignUp() {
   const [show, setShow] = useState(false);
   const [disable, setDisable] = useState(false);
   const [formData, setFormData] = useState({
-    username: "", // Changed from 'name' to 'username'
+    username: "",
     email: "",
     password: "",
     passwordVerifier: "",
