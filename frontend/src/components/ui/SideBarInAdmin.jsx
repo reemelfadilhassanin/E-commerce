@@ -117,9 +117,10 @@ function SideBarInAdmin({ children }) {
       </div>
 
       {/* المحتوى */}
-      <div className="flex-1 overflow-auto">
-        <div>
+      <div className="flex-1 w-full h-[85vh]">
+        
           <HeaderAdmin />
+          <div className="pl-30 max-md:pl-16 p-4 max-sm:pl-4 w-full h-full">
           {children}
         </div>
       </div>

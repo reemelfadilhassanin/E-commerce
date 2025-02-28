@@ -55,7 +55,7 @@ function SignIn() {
     // const res = mutate(formData);
     // const dataAboutUser = res.json();
     // if (Success) {
-    //   dispatch(signIn({email:dataAboutUser.email,role: dataAboutUser.role}));
+    //   dispatch(signIn({email:dataAboutUser.email.Email: dataAboutUser.IsAdmin}));
     dispatch(signIn({ email: formData.email, role: "admin" }));
     // }
 
