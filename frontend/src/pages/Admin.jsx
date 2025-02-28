@@ -1,6 +1,12 @@
+import { Outlet } from "react-router-dom"
+import SideBarInAdmin from "../components/ui/SideBarInAdmin"
 const Admin = () => {
   return (
-    <div>Admin</div>
+    <div className="flex items-center gap-4">
+      <SideBarInAdmin>
+      <Outlet/>
+      </SideBarInAdmin>
+    </div>
   )
 }
 
