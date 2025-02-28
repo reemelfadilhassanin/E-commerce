@@ -1,39 +1,32 @@
 import { useState } from "react";
-import { Link } from "react-router";
-import {
-  line1,
-  line2,
-  signin,
-  Google,
-  facebook,
-} from "../../public/Assets/exporting";
+import { Link, useNavigate } from "react-router";
+import { signin, Google, facebook } from "../../public/Assets/exporting";
 import { UseSignIn } from "../components/hooks/UseSignIn";
 import {
   ValidateEmail,
   ValidatePassword,
 } from "../components/hooks/useValidationEmail";
-import UseLoading from '../components/ui/useLoading';
-import UseError from '../components/ui/useError';
-import UseSuccess from '../components/ui/useSuccess';
-import {signIn} from "../store/slices/signin.js"
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-
+import UseLoading from "../components/ui/useLoading";
+import UseError from "../components/ui/useError";
+import UseSuccess from "../components/ui/useSuccess";
+import { signIn } from "../store/slices/signin.js";
+import { useDispatch,useSelector } from "react-redux";
+import AuthDesign from "../components/ui/bgAuth";
 function SignIn() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [show, setShow] = useState(false);
   const [validateEmail, setValidateEmail] = useState("");
   const [validatePassword, setValidatePassword] = useState("");
   const [Success, setSuccess] = useState(false);
-  const dispatch = useDispatch()
-  const email = useSelector((state) => state.signin.email);
-  const role = useSelector((state) => state.signin.role);
-  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
   const passWordHandler = () => {
     setShow(!show);
   };
 
-  const { mutate, isLoading, isError,error } = UseSignIn({
+  const { mutate, isLoading, isError, error } = UseSignIn({
     onSuccess: () => setSuccess(true),
   });
 
@@ -60,48 +53,27 @@ function SignIn() {
       return;
     }
 
-    mutate(formData);
-    if(Success){
-      dispatch(signIn(formData.email))
-      console.log(email)
-      console.log(role)
-    }
+    // const res = mutate(formData);
+    // const dataAboutUser = res.json();
+    // if (Success) {
+    //   dispatch(signIn({email:dataAboutUser.email,role: dataAboutUser.role}));
+      dispatch(signIn({ email: formData.email, role: "admin" }));
+    // }
+  
+    // if(dataAboutUser.admin === true){
+      navigate("/admin");
+    // }
   };
-
- 
   return (
     <div className="w-screen h-screen flex flex-col lg:flex-row overflow-hidden relative">
       {
         <>
-          {isLoading && <UseLoading/>}
-          {Success && <UseSuccess signworld="تسجيل دخولك"/>}
-          {isError && <UseError error={error}/>}
+          {isLoading && <UseLoading />}
+          {Success && <UseSuccess signworld="تسجيل دخولك" />}
+          {isError && <UseError error={error} />}
         </>
       }
-      {/* الخطوط */}
-      <div className="flex-1 relative h-full overflow-hidden">
-        <img
-          src={line1}
-          alt="Vector 1"
-          className="absolute object-cover w-full h-full inset-0 max-w-none -translate-x-10"
-        />
-        <img
-          src={line2}
-          alt="Vector 2"
-          className="absolute object-cover w-full h-full inset-0 max-w-none"
-        />
-      </div>
-      {/* الصورة */}
-      <div className="flex-1 flex items-center justify-center m-4 max-md:hidden">
-        <div className="w-full h-[90%] max-w-[600px] rounded-md overflow-hidden">
-          <img
-            src={signin}
-            alt="img-signin"
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
-      {/* the form */}
+      <AuthDesign Bg={signin} />
       <div className=" absolute z-10 w-[500px] h-fit bg-white top-[50%] translate-[-50%] left-[60%] rounded-md py-8 px-18 max-sm:px-8 max-md:left-[50%] max-md:translate-x-[-50%] max-sm:w-[360px] shadow-xl   border-[.1px] border-[#DFDFDF]">
         <div className="flex justify-center items-center gap-4">
           <i className="fa-solid fa-shop text-2xl  text-[#7F2881]"></i>
