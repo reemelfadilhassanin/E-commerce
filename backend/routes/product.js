@@ -1,16 +1,43 @@
-import Product from '../models/Product.js';
-import {
-  verifyToken,
-  verifyTokenAndAuthorization,
-  verifyTokenAndAdmin,
-} from './verifyToken.js';
 import express from 'express';
+import Product from '../models/Product.js';
+import multer from 'multer';
+import path from 'path';
+import { verifyTokenAndAdmin } from './verifyToken.js';
+
+
+const storage = multer.diskStorage({
+
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); 
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); 
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, 
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png|gif/;
+    const mimeType = fileTypes.test(file.mimetype);
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    if (mimeType && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Only images are allowed!'));
+  },
+});
 
 const router = express.Router();
 
-//CREATE
-router.post('/', verifyTokenAndAdmin, async (req, res) => {
-  const newProduct = new Product(req.body);
+// CREATE PRODUCT  http://localhost:5000/api/products
+router.post('/', verifyTokenAndAdmin, upload.single('img'), async (req, res) => {
+  
+  const newProduct = new Product({
+    ...req.body,
+    img: req.file ? req.file.path : null, 
+  });
 
   try {
     const savedProduct = await newProduct.save();
@@ -20,14 +47,14 @@ router.post('/', verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-//UPDATE
-router.put('/:id', verifyTokenAndAdmin, async (req, res) => {
+// UPDATE PRODUCT  http://localhost:5000/api/products/:id
+router.put('/:id', verifyTokenAndAdmin, upload.single('img'), async (req, res) => {
   try {
+    const updatedData = req.file ? { ...req.body, img: req.file.path } : req.body;
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      {
-        $set: req.body,
-      },
+      { $set: updatedData },
       { new: true }
     );
     res.status(200).json(updatedProduct);
@@ -36,7 +63,7 @@ router.put('/:id', verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-//DELETE
+// DELETE PRODUCT http://localhost:5000/api/products/:id
 router.delete('/:id', verifyTokenAndAdmin, async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
@@ -46,7 +73,7 @@ router.delete('/:id', verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-//GET PRODUCT
+// GET PRODUCT  http://localhost:5000/api/products/find/:id
 router.get('/find/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -56,23 +83,28 @@ router.get('/find/:id', async (req, res) => {
   }
 });
 
-//GET ALL PRODUCTS
+// GET ALL PRODUCTS with Pagination
 router.get('/', async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20; 
   try {
     let products;
 
+  
+    const skip = (page - 1) * limit;
+
     if (qNew) {
-      products = await Product.find().sort({ createdAt: -1 }).limit(1);
+      products = await Product.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
     } else if (qCategory) {
       products = await Product.find({
         categories: {
           $in: [qCategory],
         },
-      });
+      }).skip(skip).limit(limit);
     } else {
-      products = await Product.find();
+      products = await Product.find().skip(skip).limit(limit);
     }
 
     res.status(200).json(products);

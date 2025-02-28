@@ -9,6 +9,7 @@ import authRoute from './routes/auth.js';
 import productRoute from './routes/product.js';
 import cartRoute from './routes/cart.js';
 import orderRoute from './routes/order.js';
+import stripeRoute from './routes/stripe.js';
 import User from './models/User.js'; // Import User model
 import passport from 'passport';
 import session from 'express-session';
@@ -101,6 +102,7 @@ app.use('/api/users', userRoute);
 app.use('/api/products', productRoute);
 app.use('/api/carts', cartRoute);
 app.use('/api/orders', orderRoute);
+app.use("/api/checkout", stripeRoute);
 
 // Serve frontend build files (for production)
 if (process.env.NODE_ENV === 'production') {
