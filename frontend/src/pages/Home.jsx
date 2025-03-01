@@ -4,9 +4,8 @@ import Footer from "../components/ui/Footer"
 function Home() {
   return (
     <div className="flex flex-col">
-        {/* <Link to="signin">signIn</Link>
-        <Link to="signup">signUp</Link> */}
-        <Header/>
+        <Link to="signin">signIn</Link>
+        <Link to="signup">signUp</Link>
     </div>
   )
 }
