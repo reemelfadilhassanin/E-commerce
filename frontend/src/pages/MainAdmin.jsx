@@ -1,7 +1,6 @@
 function MainAdmin() {
   return (
-    
-    <>
+    <div className="">
       <p>ttttttttttttttttttttttttttt</p>
       <p>ttttttttttttttttttttttttttt</p>
       <p>ttttttttttttttttttttttttttt</p>
@@ -81,8 +80,8 @@ function MainAdmin() {
       <p>ttttttttttttttttttttttttttt</p>
       <p>ttttttttttttttttttttttttttt</p>
       <p>ttttttttttttttttttttttttttt</p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default MainAdmin
+export default MainAdmin;

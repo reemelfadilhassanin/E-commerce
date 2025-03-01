@@ -77,7 +77,7 @@ function SignUp() {
       );
       return;
     }
-    
+
     resetInputs();
     mutate(formData);
     if (success) {
@@ -91,7 +91,7 @@ function SignUp() {
         <>
           {isLoading && <UseLoading />}
           {success && <UseSuccess signworld="التسجيل" />}
-          {isError && <UseError error={error} />}
+          {isError && <UseError error={error} x={true} />}
         </>
       }
       <BgAuth Bg={signup} />
@@ -112,8 +112,8 @@ function SignUp() {
               type="text"
               className="bg-[#F8F8F8] border-[0.5px] rounded-md border-[#DFDFDF] p-2 w-full focus:outline-[#7F2881] mt-1"
               placeholder="أدخل الاسم الكامل"
-              name="username"  // Changed from 'name' to 'username'
-              value={formData.username}  // Ensure you're using 'username' here
+              name="username" // Changed from 'name' to 'username'
+              value={formData.username} // Ensure you're using 'username' here
               onChange={handleInputChange}
             />
             {validateName && (
