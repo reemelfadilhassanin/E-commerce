@@ -2,14 +2,26 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
-import { Home, SignIn, SignUp, NotFoundPage, Admin,Notifications,AddProduct } from "./pages/exporting";
+import {
+  Home,
+  SignIn,
+  SignUp,
+  NotFoundPage,
+  Admin,
+  Notifications,
+  AddProduct,
+} from "./pages/exporting";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
 import AccessDenied from "./pages/AccessDenied";
 import ProtectAdmin from "./middleware/protectAdmin";
 import MainAdmin from "./pages/MainAdmin";
-import {ProductManagement,OrderManagement,UserManagement} from "./pages/exporting";
+import {
+  ProductManagement,
+  OrderManagement,
+  UserManagement,
+} from "./pages/exporting";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -43,30 +55,32 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Admin />,
-        children:[
+        children: [
           {
-            path:"",
-            element:<MainAdmin/>
+            path: "",
+            element: <MainAdmin />,
           },
           {
-            path:'ProductManagement',
-            element:<ProductManagement/>
+            path: "ProductManagement",
+            element: <ProductManagement />,
           },
           {
-            path:'OrderManagement',
-            element:<OrderManagement/>
+            path: "OrderManagement",
+            element: <OrderManagement />,
           },
           {
-            path:'UserManagement',
-            element:<UserManagement/>
-          },{
-            path:"addProduct",
-            element:<AddProduct/>
-          },{
-            path:"notifications",
-            element:<Notifications/>
-          }
-        ]
+            path: "UserManagement",
+            element: <UserManagement />,
+          },
+          {
+            path: "addProduct",
+            element: <AddProduct />,
+          },
+          {
+            path: "notifications",
+            element: <Notifications />,
+          },
+        ],
       },
     ],
   },

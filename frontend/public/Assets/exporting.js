@@ -8,7 +8,7 @@ import facebook from "./facebook.png";
 import checked from "./checked.png";
 import errorimg from "./error.png";
 import accessDenied from "./accessDenied.svg";
-
+import AddProductImage from "./image.svg";
 export {
   line1,
   line2,
@@ -20,4 +20,5 @@ export {
   checked,
   errorimg,
   accessDenied,
+  AddProductImage,
 };

@@ -10,7 +10,7 @@ import UseLoading from "../components/ui/useLoading";
 import UseError from "../components/ui/useError";
 import UseSuccess from "../components/ui/useSuccess";
 import { signIn } from "../store/slices/signin.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import AuthDesign from "../components/ui/bgAuth";
 function SignIn() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -37,7 +37,7 @@ function SignIn() {
     }));
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
     const emailValidation = ValidateEmail(formData.email);
@@ -52,16 +52,20 @@ function SignIn() {
       return;
     }
 
-    // const res = mutate(formData);
-    // const dataAboutUser = res.json();
+    // const res = await mutate(formData);  // تأكد من أن mutate هو دالة غير متزامنة
+    // const dataAboutUser = await res.json();  // استخدام await للتأكد من الحصول على البيانات بشكل صحيح
+
     // if (Success) {
-    //   dispatch(signIn({email:dataAboutUser.email.Email: dataAboutUser.IsAdmin}));
-    dispatch(signIn({ email: formData.email, role: "admin" }));
+    //   // إصلاح الـ dispatch باستخدام الفاصلة بدلاً من `:`
+    //   dispatch(signIn({ email: dataAboutUser.Email, isAdmin: dataAboutUser.IsAdmin }));
     // }
 
-    // if(dataAboutUser.admin === true){
-    navigate("/admin");
+    // if (dataAboutUser.isAdmin === true) {
+    //   navigate("/admin");
     // }
+
+    dispatch(signIn({ email: formData.email, role: "admin" }));
+    navigate("/admin");
   };
   return (
     <div className="w-screen h-screen flex flex-col lg:flex-row overflow-hidden relative">
@@ -69,7 +73,7 @@ function SignIn() {
         <>
           {isLoading && <UseLoading />}
           {Success && <UseSuccess signworld="تسجيل دخولك" />}
-          {isError && <UseError error={error} />}
+          {isError && <UseError error={error} x={true} />}
         </>
       }
       <AuthDesign Bg={signin} />
