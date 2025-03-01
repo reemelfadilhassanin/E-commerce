@@ -7,4 +7,11 @@
     import facebook from "./facebook.png"
     import checked from "./checked.png"
     import errorimg from "./error.png"
-    export {line1,line2,errorNotFound,signin,signup,Google,facebook,checked,errorimg}
+    import FaStore from "./FaStore.png"
+    import Instagram from "./Instagram.png"
+    import X from "./X.png"
+    import LikedIn from "./LinkedIn.png"
+    import Facebook1 from "./Facebook1.png"
+    
+
+    export {line1,line2,errorNotFound,signin,signup,Google,facebook,checked,errorimg,FaStore,Instagram,X,LikedIn,Facebook1}
