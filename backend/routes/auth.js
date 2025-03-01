@@ -8,33 +8,8 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 const router = express.Router();
 
-// Google login route (added to provide the Google login option)
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    const accessToken = jwt.sign(
-      { id: req.user._id, isAdmin: req.user.isAdmin },
-      process.env.JWT_SEC,
-      { expiresIn: '3d' }
-    );
-    const { password, ...others } = req.user._doc;
-    res.status(200).json({ ...others, accessToken });
-  }
-);
-
-// Register route
 router.post('/register', async (req, res) => {
-  const { username, email, password, isAdmin } = req.body; // Allow isAdmin from the body
+  const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
     return res
@@ -42,16 +17,38 @@ router.post('/register', async (req, res) => {
       .json('All fields (username, email, password) are required.');
   }
 
+  // Check if the username already exists
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return res.status(400).json('Username is already taken.');
+  }
+
+  // Check if the email already exists
+  const existingEmail = await User.findOne({ email });
+  if (existingEmail) {
+    return res.status(400).json('Email is already in use.');
+  }
+
+  // Default `isAdmin` to false, but set to true if username is 'admin'
+  const isAdmin = username === 'admin' ? true : false;
+
+  // Create the new user with the appropriate `isAdmin` value
   const newUser = new User({
     username,
     email,
     password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString(),
-    isAdmin: username === 'admin' ? true : isAdmin || false,
+    isAdmin, // Set isAdmin based on username
   });
 
   try {
+    // Save the new user to the database
     const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+
+    // Return a response with the saved user data
+    res.status(201).json({
+      message: 'User registered successfully.',
+      user: savedUser,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({
