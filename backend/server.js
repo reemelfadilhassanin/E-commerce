@@ -14,7 +14,7 @@ import User from './models/User.js'; // Import User model
 import passport from 'passport';
 import session from 'express-session';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-
+import adminRoute from './routes/adminRoute.js';
 dotenv.config();
 
 const app = express();
@@ -102,6 +102,7 @@ app.use('/api/users', userRoute);
 app.use('/api/products', productRoute);
 app.use('/api/carts', cartRoute);
 app.use('/api/orders', orderRoute);
+app.use('/api', adminRoute);
 // app.use("/api/checkout", stripeRoute);
 
 // Serve frontend build files (for production)
