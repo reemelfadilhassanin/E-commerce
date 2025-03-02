@@ -26,8 +26,12 @@ function SignIn() {
   };
 
   const { mutate, isLoading, isError, error } = UseSignIn({
-    onSuccess: () => setSuccess(true),
+    onSuccess: () => {
+      setSuccess(true);
+      // dispatch(signIn({ email: data.Email, role:data.Connect.sid }));
+    },
   });
+  dispatch(signIn({ email: formData.email, role: "admin" }));
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +68,6 @@ function SignIn() {
     //   navigate("/admin");
     // }
 
-    dispatch(signIn({ email: formData.email, role: "admin" }));
     navigate("/admin");
   };
   return (

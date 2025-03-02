@@ -4,7 +4,9 @@ import { AddProductImage } from "../../public/Assets/exporting";
 import { useAddProduct } from "../components/hooks/UseAddProduct";
 import UseError from "../components/ui/useError";
 import UseSuccess from "../components/ui/useSuccess";
+import { useSelector } from "react-redux";
 function AddProduct() {
+    const { role } = useSelector((state) => state.signin);
   const [success, setSuccess] = useState(false);
   const [erroring, setErroring] = useState(false);
   const { mutate, isLoading, error } = useAddProduct({
@@ -25,6 +27,7 @@ function AddProduct() {
     state: "",
     description: "",
     image: null,
+    cookie:role
   });
   const [urlImg, setUrlImg] = useState("");
 
@@ -53,7 +56,7 @@ function AddProduct() {
       setUrlImg(url);
     } else {
       alert("الرجاء اختيار صورة بتنسيق PNG أو JPG.");
-      setUrlImg(""); // Clear the URL in case of invalid file type
+      setUrlImg(""); 
     }
   };
 
@@ -72,13 +75,14 @@ function AddProduct() {
     e.preventDefault();
     const formDataToSend = new FormData();
   
-    console.log(formData);  // للتأكد من محتويات formData
+    console.log(formData);
   
     formDataToSend.append("name", formData.name);
     formDataToSend.append("type", formData.type);
     formDataToSend.append("price", formData.price);
     formDataToSend.append("state", formData.state);
     formDataToSend.append("description", formData.description);
+    formDataToSend.append("cookie", formData.cookie);
   
     if (formData.image) {
       formDataToSend.append("image", formData.image);

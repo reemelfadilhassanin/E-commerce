@@ -5,7 +5,9 @@ import UseDeleteItem from "../components/hooks/UseDeleteItem.js";
 import UseLoading from "../components/ui/useLoading.jsx";
 import SkeletonLoadnig from "../components/ui/skeletonLoadnig.jsx";
 
+import { useSelector } from "react-redux";
 function ProductManagement() {
+  const { role } = useSelector((state) => state.signin);
   const [erroring, setErroring] = useState(null);
   const [erroring1, setErroring1] = useState(null);
   const [data, setData] = useState([]);
@@ -19,8 +21,7 @@ function ProductManagement() {
     },
   });
   const { mutate1, isLoading1, isError1 } = UseDeleteItem({
-    onSuccess: () => {
-    },
+    onSuccess: () => {},
     onError: (error) => {
       setErroring1(error.message);
     },
@@ -30,19 +31,16 @@ function ProductManagement() {
     mutate();
   }, [mutate]);
 
-
   return (
     <>
       {isError && <ErrorHandler error={erroring} x={false} />}
-      {isLoading1 && <UseLoading/>}
-      {isError1 && <ErrorHandler error={erroring1} x={false} /> }
+      {isLoading1 && <UseLoading />}
+      {isError1 && <ErrorHandler error={erroring1} x={false} />}
       <div className="grid grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 gap-6">
         {isLoading
           ? Array(12)
               .fill(0)
-              .map((_, index) => (
-                <SkeletonLoadnig key={index}/>
-              ))
+              .map((_, index) => <SkeletonLoadnig key={index} />)
           : data.map((item, index) => (
               <div
                 className="w-full h-[260px] rounded-md bg-[#FAF6FA] flex justify-center items-center flex-col gap-2 p-2"
@@ -79,14 +77,15 @@ function ProductManagement() {
                       </div>
                       <div
                         className="bg-[#dfdfdf] p-2 rounded-full flex justify-center items-center w-[30px] h-[30px] cursor-pointer"
-                        onClick={()=>{mutate1(item.id)}}
+                        onClick={() => {
+                          mutate1(item.id, role);
+                        }}
                       >
                         <i className="fa-solid fa-trash-can text-[#FF5646]"></i>
                       </div>
                     </div>
                   </div>
                 </div>
-              
               </div>
             ))}
         {isLoading ? "" : <p>10</p>}

@@ -11,6 +11,7 @@ import {
   Admin,
   Notifications,
   AddProduct,
+  OriginHome,
 } from "./pages/exporting";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { store } from "./store/store";
@@ -34,7 +35,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Home />,
     // children:[
-    //   {},
+    //   {
+    //     path:"home",
+    //     element:<OriginHome/>
+    //   },
     // ]
   },
   {
@@ -42,7 +46,10 @@ const router = createBrowserRouter([
     element: <SignIn />,
   },
   {
-
+    path: "home",
+    element: <OriginHome />,
+  },
+  {
     path: "/signup",
     element: <SignUp />,
   },
