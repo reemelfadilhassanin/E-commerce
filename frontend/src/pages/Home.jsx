@@ -1,11 +1,21 @@
-import { Link } from "react-router"
-function Home() {
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+
+function OriginHome() {
   return (
-    <div className="flex flex-col">
-        <Link to="signin">signIn</Link>
-        <Link to="signup">signUp</Link>
-    </div>
+    <Swiper
+    spaceBetween={50}
+    slidesPerView={1.5}
+    onSlideChange={() => console.log('slide change')}
+    onSwiper={(swiper) => console.log(swiper)}
+  >
+    <SwiperSlide>Slide 1</SwiperSlide>
+    <SwiperSlide>Slide 2</SwiperSlide>
+    <SwiperSlide>Slide 3</SwiperSlide>
+    <SwiperSlide>Slide 4</SwiperSlide>
+    
+  </Swiper>
   )
 }
 
-export default Home
+export default OriginHome
