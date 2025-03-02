@@ -12,7 +12,7 @@ const AddProduct = async (dataOfProduct) => {
             throw new Error(data.message || "فشل الإرسال")
         }
 
-        const data = res.json()
+        const data = await res.json()
     
         return data
     }catch(error){

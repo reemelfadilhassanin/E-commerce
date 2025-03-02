@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import {checked} from "../../../public/Assets/exporting"
-const SuccessHandler = ({signworld}) => {
+const SuccessHandler = ({signworld, x}) => {
     const navigate = useNavigate()
     setTimeout(() => {
       navigate("/", { replace: true });
