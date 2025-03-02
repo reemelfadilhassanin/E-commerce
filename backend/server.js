@@ -9,69 +9,46 @@ import authRoute from './routes/auth.js';
 import productRoute from './routes/product.js';
 import cartRoute from './routes/cart.js';
 import orderRoute from './routes/order.js';
-// import stripeRoute from './routes/stripe.js';
-import User from './models/User.js'; // Import User model
-import passport from 'passport';
-import session from 'express-session';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import adminRoute from './routes/adminRoute.js';
+import bodyParser from 'body-parser';
+import fs from 'fs';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+
 dotenv.config();
 
 const app = express();
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:5000/api/auth/google/callback',
-      scope: ['profile', 'email'], // Ensure this is correct
+
+// Middleware configuration
+app.use(cookieParser()); // Add cookie parser to handle cookies
+
+// Setup session with a secret and other options
+app.use(
+  session({
+    secret: 'your-session-secret', // Make sure this is a strong secret for production
+    resave: false, 
+    saveUninitialized: false, 
+    cookie: {
+      httpOnly: true, // Helps to prevent client-side access to cookies
+      secure: false, // Set to true in production if using HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 1 day session
     },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ email: profile.emails[0].value });
-
-        if (!user) {
-          user = new User({
-            username: profile.displayName,
-            email: profile.emails[0].value,
-            googleId: profile.id,
-            isAdmin: false,
-          });
-          await user.save();
-        }
-
-        return done(null, user);
-      } catch (error) {
-        return done(error, false);
-      }
-    }
-  )
+  })
 );
 
-// Serialize user into session
-passport.serializeUser((user, done) => {
-  done(null, user.id); // Store the user ID in the session
-});
+app.use(cors());
+app.use(express.json()); // Middleware to parse JSON body
 
-// Deserialize user from session
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user); // Attach the user object to the session
-  } catch (err) {
-    done(err, null); // Handle errors in deserialization
-  }
-});
+// Increase JSON body limit for larger payloads
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // MongoDB connection
 const connectDB = async () => {
   try {
-    const mongoURI =
-      process.env.MONGO_URI || 'mongodb://localhost:27017/ecommerce';
+    const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/ecommerce';
     const connection = await mongoose.connect(mongoURI);
-    console.log(
-      chalk.green(`MongoDB Connected: ${connection.connection.host}`)
-    );
+    console.log(chalk.green(`MongoDB Connected: ${connection.connection.host}`));
   } catch (error) {
     console.error(chalk.red('Error connecting to MongoDB:', error.message));
     process.exit(1);
@@ -80,40 +57,23 @@ const connectDB = async () => {
 
 connectDB();
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Session setup for Passport.js
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session()); // This is necessary for handling sessions
-
 // Routes
-app.use('/api/auth', authRoute);
-app.use('/api/users', userRoute);
-app.use('/api/products', productRoute);
-app.use('/api/carts', cartRoute);
-app.use('/api/orders', orderRoute);
-app.use('/api', adminRoute);
-// app.use("/api/checkout", stripeRoute);
+app.use('/api/auth', authRoute); // Authentication routes
+app.use('/api/users', userRoute); // User-related routes
+app.use('/api/products', productRoute); // Product-related routes
+app.use('/api/carts', cartRoute); // Cart-related routes
+app.use('/api/orders', orderRoute); // Order-related routes
+app.use('/api/admin', adminRoute); // Admin routes
 
-// Serve frontend build files (for production)
+// Serve frontend build files in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'frontend/build')));
+  app.use(express.static(path.join(__dirname, 'frontend', 'build')));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
   });
 }
 
-// Test route
+// Test route for API status check
 app.get('/test', (req, res) => {
   res.send('API is running');
 });
@@ -121,11 +81,28 @@ app.get('/test', (req, res) => {
 // CORS configuration
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173', // Frontend URL for local development (adjust if needed)
     methods: 'GET,POST,PUT,DELETE',
-    credentials: true,
+    credentials: true, // Allow cookies to be sent along with requests
   })
 );
+
+const __dirname = path.resolve(); // Resolves correct directory when using ES modules
+
+// Fix for the path if OneDrive or non-standard directory is used
+const uploadDir = path.join(__dirname, 'uploads');
+
+// Ensure the uploads directory exists or create it
+if (!fs.existsSync(uploadDir)) {
+  console.log('Creating uploads directory...');
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log('Uploads directory created at:', uploadDir);
+} else {
+  console.log('Uploads directory already exists at:', uploadDir);
+}
+
+// Serve the uploads directory as a static folder
+app.use('/uploads', express.static(uploadDir));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
