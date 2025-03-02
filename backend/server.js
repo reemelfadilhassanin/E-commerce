@@ -10,38 +10,43 @@ import productRoute from './routes/product.js';
 import cartRoute from './routes/cart.js';
 import orderRoute from './routes/order.js';
 import adminRoute from './routes/adminRoute.js';
-import bodyParser from 'body-parser';
-import fs from 'fs';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import fs from 'fs';
 
 dotenv.config();
 
 const app = express();
 
 // Middleware configuration
-app.use(cookieParser()); // Add cookie parser to handle cookies
+app.use(cookieParser());  // Cookie parsing
 
-// Setup session with a secret and other options
+// Session configuration
 app.use(
   session({
-    secret: 'your-session-secret', // Make sure this is a strong secret for production
+    secret: 'your-session-secret', 
     resave: false, 
     saveUninitialized: false, 
     cookie: {
-      httpOnly: true, // Helps to prevent client-side access to cookies
-      secure: false, // Set to true in production if using HTTPS
+      httpOnly: true,
+      secure: false, // true in production (HTTPS)
       maxAge: 24 * 60 * 60 * 1000, // 1 day session
     },
   })
 );
 
-app.use(cors());
-app.use(express.json()); // Middleware to parse JSON body
+// Body parsing
+app.use(express.json({ limit: '10mb' })); // JSON body parsing
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // URL-encoded body parsing
 
-// Increase JSON body limit for larger payloads
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+// CORS setup
+const corsOptions = {
+  origin: 'http://localhost:5173',  // Update for your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,  // Allow cookies
+};
+
+app.use(cors(corsOptions));  // Enable CORS
 
 // MongoDB connection
 const connectDB = async () => {
@@ -57,13 +62,13 @@ const connectDB = async () => {
 
 connectDB();
 
-// Routes
-app.use('/api/auth', authRoute); // Authentication routes
-app.use('/api/users', userRoute); // User-related routes
-app.use('/api/products', productRoute); // Product-related routes
-app.use('/api/carts', cartRoute); // Cart-related routes
-app.use('/api/orders', orderRoute); // Order-related routes
-app.use('/api/admin', adminRoute); // Admin routes
+// Routes setup
+app.use('/api/auth', authRoute);
+app.use('/api/users', userRoute);
+app.use('/api/products', productRoute);
+app.use('/api/carts', cartRoute);
+app.use('/api/orders', orderRoute);
+app.use('/api/admin', adminRoute);
 
 // Serve frontend build files in production
 if (process.env.NODE_ENV === 'production') {
@@ -78,30 +83,16 @@ app.get('/test', (req, res) => {
   res.send('API is running');
 });
 
-// CORS configuration
-app.use(
-  cors({
-    origin: 'http://localhost:5173', // Frontend URL for local development (adjust if needed)
-    methods: 'GET,POST,PUT,DELETE',
-    credentials: true, // Allow cookies to be sent along with requests
-  })
-);
-
-const __dirname = path.resolve(); // Resolves correct directory when using ES modules
-
-// Fix for the path if OneDrive or non-standard directory is used
+// Static upload directory handling
+const __dirname = path.resolve();
 const uploadDir = path.join(__dirname, 'uploads');
 
-// Ensure the uploads directory exists or create it
+// Ensure the uploads directory exists
 if (!fs.existsSync(uploadDir)) {
   console.log('Creating uploads directory...');
   fs.mkdirSync(uploadDir, { recursive: true });
-  console.log('Uploads directory created at:', uploadDir);
-} else {
-  console.log('Uploads directory already exists at:', uploadDir);
 }
 
-// Serve the uploads directory as a static folder
 app.use('/uploads', express.static(uploadDir));
 
 const PORT = process.env.PORT || 5000;

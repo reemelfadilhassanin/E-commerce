@@ -35,7 +35,7 @@ const router = express.Router();
 router.post(
   '/',
   verifyTokenAndAdmin,
-  upload.single('img'),
+  upload.single('image'),
   async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'Image is required' });
@@ -59,7 +59,7 @@ router.post(
 router.put(
   '/:id',
   verifyTokenAndAdmin,
-  upload.single('img'),
+  upload.single('image'),
   async (req, res) => {
     try {
       const updatedData = req.file
