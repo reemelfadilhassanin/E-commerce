@@ -9,6 +9,11 @@ import checked from "./checked.png";
 import errorimg from "./error.png";
 import accessDenied from "./accessDenied.svg";
 import AddProductImage from "./image.svg";
+import home from "./home.png"
+import home1 from "./home1.png"
+import home2 from "./home2.png"
+import mustsall from "./mostsall.png"
+import ploza from "./ploza.png"
 export {
   line1,
   line2,
@@ -21,4 +26,9 @@ export {
   errorimg,
   accessDenied,
   AddProductImage,
+  home,
+  home1,
+  home2,
+  mustsall,
+  ploza
 };
