@@ -18,7 +18,7 @@ function SmallDeviceFilter({ close }) {
 
       {/* زر الإغلاق */}
       <div
-        className="absolute top-[-10px] right-[6%] w-[40px] h-[40px] rounded-md z-[100] bg-[#F3EAF3] cursor-pointer flex items-center justify-center text-[#636B6A]"
+        className="absolute top-[-20px] right-[6%] w-[40px] h-[40px] rounded-md z-[100] bg-[#F3EAF3] cursor-pointer flex items-center justify-center text-[#636B6A]"
         onClick={handleClose}
       >
         ✕

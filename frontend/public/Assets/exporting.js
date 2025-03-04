@@ -1,4 +1,3 @@
-
 import line1 from "./line1.svg";
 import line2 from "./line2.svg";
 import errorNotFound from "./error-404.svg";
@@ -20,6 +19,9 @@ import homing2 from "./homing2.png";
 import homing3 from "./homing3.png";
 import homing4 from "./homing4.png";
 import homing5 from "./homing5.png";
+import offers1 from "./offers1.png";
+import offers2 from "./offers2.png";
+import offers3 from "./offers3.png";
 export {
   line1,
   line2,
@@ -42,4 +44,7 @@ export {
   homing3,
   homing4,
   homing5,
+  offers1,
+  offers2,
+  offers3,
 };

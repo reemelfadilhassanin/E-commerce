@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Slider from "../components/ui/Slider";
 import SectionTitle from "../components/ui/SectionTitle";
 import Filter from "../components/ui/Filter";
 import Product from "../components/ui/Product";
-import { ploza } from "../../public/Assets/exporting";
+import {
+  ploza,
+  offers1,
+  offers2,
+  offers3,
+} from "../../public/Assets/exporting";
 import SmallDeviceFilter from "../components/ui/SmallDeviceFilter";
 function Offers() {
   const [openFilter, setOpenFilter] = useState(false);
@@ -26,7 +31,7 @@ function Offers() {
   ];
   return (
     <div>
-      <Slider />
+      <Slider img1={offers1} img2={offers2} img3={offers3} />
 
       <div className="container">
         <div className="flex justify-center items-center max-sm:justify-between  ">
@@ -51,7 +56,7 @@ function Offers() {
           <div className="max-sm:hidden">
             <Filter />
           </div>
-          <div className=" grid gap-4 max-lg:col-span-3 max-md:col-span-2 max-lg:grid-cols-3 max-md:grid-cols-2">
+          <div className=" grid gap-4 grid-cols-3 col-span-3 max-lg:col-span-3 max-md:col-span-2 max-lg:grid-cols-3 max-md:grid-cols-2">
             {data.map((item, index) => (
               <Product img={item} key={index} />
             ))}
