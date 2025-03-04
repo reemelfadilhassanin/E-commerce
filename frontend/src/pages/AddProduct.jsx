@@ -6,7 +6,7 @@ import UseError from "../components/ui/useError";
 import UseSuccess from "../components/ui/useSuccess";
 import { useSelector } from "react-redux";
 function AddProduct() {
-    const { role } = useSelector((state) => state.signin);
+  const { role } = useSelector((state) => state.signin);
   const [success, setSuccess] = useState(false);
   const [erroring, setErroring] = useState(false);
   const { mutate, isLoading, error } = useAddProduct({
@@ -27,7 +27,7 @@ function AddProduct() {
     state: "",
     description: "",
     image: null,
-    cookie:role
+    cookie: role,
   });
   const [urlImg, setUrlImg] = useState("");
 
@@ -56,7 +56,7 @@ function AddProduct() {
       setUrlImg(url);
     } else {
       alert("الرجاء اختيار صورة بتنسيق PNG أو JPG.");
-      setUrlImg(""); 
+      setUrlImg("");
     }
   };
 
@@ -74,23 +74,23 @@ function AddProduct() {
   const submitHandler = (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-  
+
     console.log(formData);
-  
+
     formDataToSend.append("name", formData.name);
     formDataToSend.append("type", formData.type);
     formDataToSend.append("price", formData.price);
     formDataToSend.append("state", formData.state);
     formDataToSend.append("description", formData.description);
     formDataToSend.append("cookie", formData.cookie);
-  
+
     if (formData.image) {
       formDataToSend.append("image", formData.image);
     }
-  
+
     mutate(formDataToSend);
     console.log(formDataToSend, "done");
-  
+
     setFormData({
       name: "",
       type: "",
@@ -100,7 +100,6 @@ function AddProduct() {
       image: null,
     });
   };
-  
 
   return (
     <>
@@ -187,7 +186,6 @@ function AddProduct() {
               <img
                 className="bg-[#dfdfdf] w-full h-full rounded-md object-cover"
                 src={urlImg}
-                alt="img"
               />
             </div>
             <div
@@ -222,7 +220,6 @@ function AddProduct() {
                 <img
                   className="w-[50px] h-[50px] bg-[#00000020] rounded-md object-cover"
                   src={urlImg}
-                  alt="img"
                 />
               </div>
               <div className="flex flex-col flex-1  gap-2">
