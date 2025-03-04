@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const Filter = () => {
   const [openIndex, setOpenIndex] = useState(0);
-
+  
   return (
     <div className="shadow rounded-md sticky top-4 flex justify-center gap-2 flex-col pb-3">
       <div className="px-4 flex justify-center flex-col gap-1">
@@ -56,7 +56,7 @@ const Filter = () => {
                     id={`${item.name}-${subItem}`}
                     name={item.name}
                     className="appearance-none w-5 h-5 border-4 border-gray-400 rounded-full checked:border-[#7B1D81]"
-                    defaultChecked={subIndex === 0} // تحديد الخيار الأول تلقائيًا
+                    defaultChecked={subIndex === 0} 
                   />
                   <label
                     htmlFor={`${item.name}-${subItem}`}
@@ -91,7 +91,7 @@ const Filter = () => {
                 id={`price-${priceIndex}`}
                 name="price"
                 className="appearance-none w-5 h-5 border-4 border-gray-400 rounded-full checked:border-[#7B1D81]"
-                defaultChecked={priceIndex === 0} // تحديد الخيار الأول تلقائيًا
+                defaultChecked={priceIndex === 0}
               />
               <label
                 htmlFor={`price-${priceIndex}`}

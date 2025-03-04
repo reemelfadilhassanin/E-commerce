@@ -11,6 +11,7 @@ import {
   Notifications,
   AddProduct,
   OriginHome,
+  Offers
 } from "./pages/exporting";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { store } from "./store/store";
@@ -37,16 +38,15 @@ const router = createBrowserRouter([
       {
         path:"",
         element:<OriginHome/>
-      },
+      },{
+        path:"offers",
+        element:<Offers/>,
+      }
     ]
   },
   {
     path: "/signIn",
     element: <SignIn />,
-  },
-  {
-    path: "home",
-    element: <OriginHome />,
   },
   {
     path: "/signup",

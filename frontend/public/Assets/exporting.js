@@ -9,11 +9,16 @@ import checked from "./checked.png";
 import errorimg from "./error.png";
 import accessDenied from "./accessDenied.svg";
 import AddProductImage from "./image.svg";
-import home from "./home.png"
-import home1 from "./home1.png"
-import home2 from "./home2.png"
-import mustsall from "./mostsall.png"
-import ploza from "./ploza.png"
+import home from "./home.png";
+import home1 from "./home1.png";
+import home2 from "./home2.png";
+import mustsall from "./mostsall.png";
+import ploza from "./ploza.png";
+import homing1 from "./homing1.png";
+import homing2 from "./homing2.png";
+import homing3 from "./homing3.png";
+import homing4 from "./homing4.png";
+import homing5 from "./homing5.png";
 export {
   line1,
   line2,
@@ -30,5 +35,10 @@ export {
   home1,
   home2,
   mustsall,
-  ploza
+  ploza,
+  homing1,
+  homing2,
+  homing3,
+  homing4,
+  homing5,
 };
