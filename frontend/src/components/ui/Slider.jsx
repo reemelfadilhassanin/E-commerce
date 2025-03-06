@@ -4,14 +4,9 @@ import { Navigation, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useRef, useEffect, useState } from "react";
-<<<<<<< HEAD
 import { home, home1, home2 } from "../../../public/Assets/exporting";
 
 function Slider() {
-=======
-
-function Slider({ img1, img2, img3 }) {
->>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const swiperRef = useRef(null);
@@ -40,11 +35,7 @@ function Slider({ img1, img2, img3 }) {
       {/* زر السهم الأيسر */}
       <button
         ref={prevRef}
-<<<<<<< HEAD
         className={`w-[40px] h-[40px] flex justify-center items-center absolute left-36 max-md:left-8 top-1/2 -translate-y-1/2 z-10 bg-white p-3 rounded-full cursor-pointer shadow-md transition max-lg:w-[30px] max-lg:h-[30px] max-sm:w-[20px] max-sm:h-[20px] ${
-=======
-        className={`w-[40px] h-[40px] flex justify-center items-center absolute left-28 max-md:left-8 top-1/2 -translate-y-1/2 z-10 bg-white p-3 rounded-full cursor-pointer shadow-md transition max-lg:w-[30px] max-lg:h-[30px] max-sm:w-[20px] max-sm:h-[20px] ${
->>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
           isBeginning ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
         disabled={isBeginning}
@@ -65,29 +56,17 @@ function Slider({ img1, img2, img3 }) {
           {
             type: "الملابس الصيفية",
             percint: "20",
-<<<<<<< HEAD
             img: home1,
-=======
-            img: img1,
->>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
           },
           {
             type: "الملابس الشتوية",
             percint: "50",
-<<<<<<< HEAD
             img: home,
-=======
-            img: img2,
->>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
           },
           {
             type: "الاكترونيات",
             percint: "30",
-<<<<<<< HEAD
             img: home2,
-=======
-            img: img3,
->>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
           },
         ].map((item, index) => (
           <SwiperSlide
@@ -100,14 +79,8 @@ function Slider({ img1, img2, img3 }) {
             <div className="absolute top-0 left-0 w-full h-full bg-[#00000050] rounded-md"></div>
             <img
               src={item.img}
-<<<<<<< HEAD
               className="w-full h-full rounded-xl object-cover max-md:rounded-md"
             />
-=======
-              className="w-full h-[620px] max-md:h-[200px] rounded-xl object-cover max-md:rounded-md"
-            />
-
->>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
             <div className="absolute top-1/2 left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[60%] max-[400px]:w-[80%] flex flex-col gap-4 text-center lg:text-right">
               <p className="text-3xl max-md:text-lg text-white">
                 بمناسبة شهر رمضان
@@ -140,11 +113,7 @@ function Slider({ img1, img2, img3 }) {
       {/* زر السهم الأيمن */}
       <button
         ref={nextRef}
-<<<<<<< HEAD
         className={`w-[40px] h-[40px] flex justify-center items-center absolute right-34 max-md:right-8 top-1/2 -translate-y-1/2 z-10 bg-white p-3 rounded-full cursor-pointer shadow-md transition  max-lg:w-[30px] max-lg:h-[30px] max-sm:w-[20px] max-sm:h-[20px] ${
-=======
-        className={`w-[40px] h-[40px] flex justify-center items-center absolute right-30 max-md:right-8 top-1/2 -translate-y-1/2 z-10 bg-white p-3 rounded-full cursor-pointer shadow-md transition  max-lg:w-[30px] max-lg:h-[30px] max-sm:w-[20px] max-sm:h-[20px] ${
->>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
           isEnd ? "opacity-50 cursor-not-allowed" : "opacity-100"
         }`}
         disabled={isEnd}
