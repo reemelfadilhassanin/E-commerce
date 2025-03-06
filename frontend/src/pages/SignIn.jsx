@@ -60,8 +60,7 @@ function SignIn() {
     // const dataAboutUser = await res.json();  // استخدام await للتأكد من الحصول على البيانات بشكل صحيح
 
     // if (Success) {
-    //   // إصلاح الـ dispatch باستخدام الفاصلة بدلاً من `:`
-    //   dispatch(signIn({ email: dataAboutUser.Email, isAdmin: dataAboutUser.IsAdmin }));
+    //   dispatch(signIn({ email: dataAboutUser.Email, role: dataAboutUser.coki }));
     // }
 
     // if (dataAboutUser.isAdmin === true) {
