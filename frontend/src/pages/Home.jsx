@@ -6,6 +6,12 @@ import {
   homing3,
   homing4,
   homing5,
+<<<<<<< HEAD
+=======
+  home,
+  home1,
+  home2,
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
 } from "../../public/Assets/exporting";
 import Product from "../components/ui/Product";
 import Filter from "../components/ui/Filter";
@@ -33,6 +39,7 @@ function OriginHome() {
   const [openFilter, setOpenFilter] = useState(false);
   return (
     <div className="relative">
+<<<<<<< HEAD
       <Slider />
       <div className="container border-t-[1px] border-[#F3EAF3]">
         <div
@@ -42,6 +49,22 @@ function OriginHome() {
           <p
              onClick={() => setOpenFilter(true)} className="w-[30px] hidden max-sm:block cursor-pointer bg-red-900">filter</p>
           <div className={`${openFilter ? "" : "hidden"} min-sm:hidden max-sm:absolute`}> 
+=======
+      <Slider img1={home1} img2={home} img3={home2} />
+      <div className="container border-t-[1px] border-[#F3EAF3]">
+        <div className="z-[100] bg-white p-2 flex max-sm:justify-between justify-center items-center ">
+          <p
+            onClick={() => setOpenFilter(true)}
+            className="w-[30px] hidden max-sm:block cursor-pointer bg-red-900"
+          >
+            filter
+          </p>
+          <div
+            className={`${
+              openFilter ? "" : "hidden"
+            } min-sm:hidden max-sm:absolute`}
+          >
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
             <SmallDeviceFilter close={setOpenFilter} />
           </div>
           <SectionTitle title="الأكثر مبيعاً" />

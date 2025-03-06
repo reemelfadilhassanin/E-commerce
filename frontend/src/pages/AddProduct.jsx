@@ -6,6 +6,10 @@ import UseError from '../components/ui/useError';
 import UseSuccess from '../components/ui/useSuccess';
 
 function AddProduct() {
+<<<<<<< HEAD
+=======
+  const { role } = useSelector((state) => state.signin);
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
   const [success, setSuccess] = useState(false);
   const [erroring, setErroring] = useState(false);
   const { mutate, isLoading, error } = useAddProduct({
@@ -34,6 +38,10 @@ function AddProduct() {
     state: '',
     description: '',
     image: null,
+<<<<<<< HEAD
+=======
+    cookie: role,
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
   });
 
   const [urlImg, setUrlImg] = useState('');
@@ -62,8 +70,13 @@ function AddProduct() {
       const url = URL.createObjectURL(file);
       setUrlImg(url);
     } else {
+<<<<<<< HEAD
       alert('الرجاء اختيار صورة بتنسيق PNG أو JPG.');
       setUrlImg('');
+=======
+      alert("الرجاء اختيار صورة بتنسيق PNG أو JPG.");
+      setUrlImg("");
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
     }
   };
 
@@ -81,6 +94,7 @@ function AddProduct() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
   
     
     if (
@@ -113,6 +127,36 @@ function AddProduct() {
     }
   };
   
+=======
+    const formDataToSend = new FormData();
+
+    console.log(formData);
+
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("type", formData.type);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("state", formData.state);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("cookie", formData.cookie);
+
+    if (formData.image) {
+      formDataToSend.append("image", formData.image);
+    }
+
+    mutate(formDataToSend);
+    console.log(formDataToSend, "done");
+
+    setFormData({
+      name: "",
+      type: "",
+      price: "",
+      state: "",
+      description: "",
+      image: null,
+    });
+  };
+
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
   return (
     <>
       {erroring && (
@@ -180,6 +224,7 @@ function AddProduct() {
 
           <div className="sm:col-span-3 xl:col-span-3 p-4 w-full h-fit rounded-xl shadow-[1px_0px_20px_rgba(0,0,0,0.2),-4px_0px_10px_rgba(0,0,0,0.2)]">
             <div className="w-full h-[18rem] border-[10px] border-[#FAFAFA] bg-[#FAFAFA] rounded-md">
+<<<<<<< HEAD
               {urlImg && (
                 <img
                   className="bg-[#dfdfdf] w-full h-full rounded-md object-cover"
@@ -187,6 +232,12 @@ function AddProduct() {
                   alt="Product Preview"
                 />
               )}
+=======
+              <img
+                className="bg-[#dfdfdf] w-full h-full rounded-md object-cover"
+                src={urlImg}
+              />
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
             </div>
             <div
               className="h-fit rounded-md border-2 border-dashed border-[#636b6a] w-full mt-4 p-4 flex items-center flex-col gap-8 text-center"
@@ -219,7 +270,11 @@ function AddProduct() {
               <div>
                 <img
                   className="w-[50px] h-[50px] bg-[#00000020] rounded-md object-cover"
+<<<<<<< HEAD
                   src={urlImg || 'default-image.png'} // Fallback image
+=======
+                  src={urlImg}
+>>>>>>> b05a7d8ed3b3f6515ab40119e9f97b9f71a2a385
                 />
               </div>
               <div className="flex flex-col flex-1 gap-2">
