@@ -4,6 +4,8 @@ import AddProduct from "../../Api/AddProduct";
 export const useAddProduct = ({onSuccess,onError}) => {
     return useMutation ({
         mutationFn:AddProduct,
+
+
         onSuccess:(data)=>{
             console.log(data);
             if(onSuccess){

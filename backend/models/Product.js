@@ -2,20 +2,23 @@ import mongoose from 'mongoose';
 
 const ProductSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true, unique: true },
-    desc: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
+    description: { type: String, required: true },
     image: { type: String, required: true },
-    categories: {
+    type: {
       type: [String],
       required: true,
+      validate: {
+        validator: Array.isArray,
+        message: 'Type must be an array.',
+      },
     },
     price: { type: Number, required: true },
-    status: {
+    state: {
       type: Boolean,
       default: true,
     },
   },
   { timestamps: true }
 );
-
 export default mongoose.model('Product', ProductSchema);

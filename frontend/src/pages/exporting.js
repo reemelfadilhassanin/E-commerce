@@ -13,5 +13,6 @@ import Notifications from "./Notifications.jsx"
 // import Footer from "../components/ui/Footer";
 // export {AddProduct,Notifications,Home,SignIn,SignUp,Admin,NotFoundPage,UserManagement,OrderManagement,ProductManagement,Header,Footer}
 import OriginHome from "./Home.jsx";
-export {AddProduct,Notifications,Home,SignIn,SignUp,Admin,NotFoundPage,UserManagement,OrderManagement,ProductManagement,OriginHome}
+import Offers from "./Offers.jsx";
+export {Offers,AddProduct,Notifications,Home,SignIn,SignUp,Admin,NotFoundPage,UserManagement,OrderManagement,ProductManagement,OriginHome}
 

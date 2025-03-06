@@ -17,28 +17,6 @@ import fs from 'fs';
 dotenv.config();
 
 const app = express();
-
-// Middleware configuration
-app.use(cookieParser());  // Cookie parsing
-
-// Session configuration
-app.use(
-  session({
-    secret: 'your-session-secret', 
-    resave: false, 
-    saveUninitialized: false, 
-    cookie: {
-      httpOnly: true,
-      secure: false, // true in production (HTTPS)
-      maxAge: 24 * 60 * 60 * 1000, // 1 day session
-    },
-  })
-);
-
-// Body parsing
-app.use(express.json({ limit: '10mb' })); // JSON body parsing
-app.use(express.urlencoded({ limit: '10mb', extended: true })); // URL-encoded body parsing
-
 // CORS setup
 const corsOptions = {
   origin: 'http://localhost:5173',  // Update for your frontend URL
@@ -47,6 +25,27 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));  // Enable CORS
+
+// Middleware configuration
+app.use(cookieParser());
+app.use(
+  session({
+    secret: 'your-session-secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false, // Change to true in production with HTTPS
+      sameSite: 'None',
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
+
+// Body parsing
+app.use(express.json({ limit: '10mb' })); // JSON body parsing
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // URL-encoded body parsing
+
 
 // MongoDB connection
 const connectDB = async () => {

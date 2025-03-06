@@ -43,33 +43,41 @@ function SignIn() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
+  
     const emailValidation = ValidateEmail(formData.email);
     if (!emailValidation.isValid) {
       setValidateEmail(emailValidation.error);
       return;
     }
-
+  
     const passwordValidation = ValidatePassword(formData.password);
     if (!passwordValidation.isValid) {
       setValidatePassword(passwordValidation.error);
       return;
     }
-
-    // const res = await mutate(formData);  // تأكد من أن mutate هو دالة غير متزامنة
-    // const dataAboutUser = await res.json();  // استخدام await للتأكد من الحصول على البيانات بشكل صحيح
-
-    // if (Success) {
-    //   // إصلاح الـ dispatch باستخدام الفاصلة بدلاً من `:`
-    //   dispatch(signIn({ email: dataAboutUser.Email, isAdmin: dataAboutUser.IsAdmin }));
-    // }
-
-    // if (dataAboutUser.isAdmin === true) {
-    //   navigate("/admin");
-    // }
-
-    navigate("/admin");
+  
+    // Send POST request to login API with credentials
+    const response = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Ensure the cookie is included
+    });
+  
+    const data = await response.json();
+  
+    if (response.ok) {
+      // If login is successful, navigate to admin
+      navigate('/admin');
+    } else {
+      // Handle login failure
+      setSuccess(false);
+      console.error('Login failed:', data.message);
+    }
   };
+  
   return (
     <div className="w-screen h-screen flex flex-col lg:flex-row overflow-hidden relative">
       {
