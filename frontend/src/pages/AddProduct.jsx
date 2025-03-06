@@ -156,16 +156,18 @@ function AddProduct() {
               </div>
               <div className="flex flex-col gap-2 mb-4">
                 <label htmlFor="">الحالة</label>
-                <input
-                  id=""
-                  className="rounded-md border-[2px] border-[#eeeeee] bg-[#F8F8F8] p-[6px] h-[40px] focus:border-[#7F2881] focus:outline-0"
-                  required
-                  value={formData.state}
-                  name="state"
+                <select
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
-                />
+                  className="rounded-md border-[2px]  border-[#eeeeee] bg-[#F8F8F8] p-[6px] h-[40px] focus:border-[#7F2881] focus:outline-0"
+                  required
+                  id="price"
+                  name="state"
+                >
+                  <option value="instock">متوفر</option>
+                  <option value="outstock">غير متوفر</option>
+                </select>
               </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor="">الوصف</label>
@@ -189,7 +191,7 @@ function AddProduct() {
               />
             </div>
             <div
-              className={`h-fit rounded-md border-2 border-dashed border-[#636b6a] w-full mt-4 p-4 flex  items-center flex-col gap-8 text-center`}
+              className={`h-fit rounded-md border-2 border-dashed border-[#636b6a] w-full mt-4 p-4 flex items-center flex-col gap-8 text-center`}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
             >
@@ -201,7 +203,7 @@ function AddProduct() {
               </p>
               <div>
                 <label
-                  className="border-1 py-2 px-10 rounded-md cursor-pointer"
+                  className="border-1 py-2 px-10 rounded-md cursor-pointer w-fit"
                   htmlFor="Browse"
                 >
                   Browse
@@ -209,7 +211,7 @@ function AddProduct() {
                 <input
                   type="file"
                   name="file"
-                  className="opacity-0"
+                  className="hidden"
                   onChange={imgHandler}
                   id="Browse"
                 />
@@ -229,7 +231,9 @@ function AddProduct() {
                 </div>
               </div>
 
-              <i className="fa-solid fa-circle-check text-[#7F2881]"></i>
+              <div className="w-[50px] h-[50px] flex justify-center items-center">
+                <i className="fa-solid fa-circle-check text-[#7F2881]"></i>
+              </div>
             </div>
           </div>
         </div>
