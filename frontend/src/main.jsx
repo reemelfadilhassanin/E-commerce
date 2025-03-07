@@ -31,19 +31,7 @@ element:<NotFoundPage/>
   {
    path:'/signup',
     element: <SignUp/>,
-  },
-  {
-    path:'/header',
-     element:<Header/>,
-   },
-   {
-    path:'/header',
-     element:<Footer/>,
-   },
-   {
-    path:'/header',
-     element:<About/>,
-   }
+  }
 ])
 
 createRoot(document.getElementById('root')).render(
