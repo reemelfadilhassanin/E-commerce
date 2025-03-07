@@ -1,8 +1,4 @@
 import { Link } from "react-router"
-import { Footer, Header, About } from "./exporting"
-
-
-
 
 function Home() {
   return (
