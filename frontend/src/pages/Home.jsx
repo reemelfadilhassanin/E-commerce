@@ -1,6 +1,5 @@
 import Slider from "../components/ui/Slider";
 import {
-  ploza,
   homing1,
   homing2,
   homing3,
@@ -10,53 +9,72 @@ import {
 import Product from "../components/ui/Product";
 import Filter from "../components/ui/Filter";
 import SectionTitle from "../components/ui/SectionTitle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SmallDeviceFilter from "../components/ui/SmallDeviceFilter";
+import UseGetElementForHomePage from "../components/hooks/UseGetElementForHomePage";
+import ErrorHandler from "../components/ui/useError";
+import SkeletonLoadnig from "../components/ui/SkeletonLoadnig";
+import SkeleyonFilterLoading from "../components/ui/skeleyonFilterLoading";
 function OriginHome() {
-  const data = [
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-    ploza,
-  ];
+  const { mutate, isLoading, error, onError } = UseGetElementForHomePage();
+    const [data, setData] = useState([]);
+
+  useEffect(() => {
+  const fetchData =  mutate();
+  setData(fetchData);
+  }, []);
+
   const [openFilter, setOpenFilter] = useState(false);
   return (
     <div className="relative">
+      <>{onError && <ErrorHandler error={error} />}</>
       <Slider />
       <div className="container border-t-[1px] border-[#F3EAF3]">
-        <div
-       
-          className="z-[100] bg-white p-2 flex max-sm:justify-between justify-center items-center "
-        >
+        <div className="z-[100] bg-white p-2 flex max-sm:justify-between justify-center items-center ">
           <p
-             onClick={() => setOpenFilter(true)} className="w-[30px] hidden max-sm:block cursor-pointer bg-red-900">filter</p>
-          <div className={`${openFilter ? "" : "hidden"} min-sm:hidden max-sm:absolute`}> 
+            onClick={() => {
+              if(isLoading){
+                setOpenFilter(true)
+              }
+            }}
+            className="w-[30px] hidden max-sm:block cursor-pointer bg-red-900"
+          >
+            filter
+          </p>
+          <div
+            className={`${
+              openFilter ? "" : "hidden"
+            } min-sm:hidden max-sm:absolute`}
+          >
             <SmallDeviceFilter close={setOpenFilter} />
           </div>
           <SectionTitle title="الأكثر مبيعاً" />
           <div className="w-[30px] h-full"></div>
         </div>
-        <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3">
-          <div className="relative max-sm:hidden">
-            <Filter />
+        {isLoading ? (
+          <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-sm:grid-cols-2 animate-pulse">
+          <SkeleyonFilterLoading/>
+            <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
+
+            {Array(6)
+              .fill(1)
+              .map((_, index) => (
+                <SkeletonLoadnig key={index} />
+              ))}
+            </div>
           </div>
-          <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
-            {data.map((item, index) => (
-              <Product img={item} key={index} />
-            ))}
+        ) : (
+          <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3">
+            <div className="relative max-sm:hidden">
+              <Filter />
+            </div>
+            <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
+              {data.map((item, index) => (
+                <Product img={item} key={index} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         <SectionTitle title={"منتجات مميزة"} />
         <div className="flex h-auto gap-2 max-sm:flex-col max-sm:h-auto">
           {/* العمود الأول */}
