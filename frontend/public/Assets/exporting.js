@@ -12,6 +12,16 @@
     import X from "./X.png"
     import LikedIn from "./LinkedIn.png"
     import Facebook1 from "./Facebook1.png"
-    
+    import ellipse from "./ellipse.png"
+    import chevronLeft  from "./chevronLeft.png"
+    import arrowright from "./arrowright.png"
+    import rectangle from "./rectangle.png"
+    import rectangle1 from "./rectangle1.png"
+    import rectangle3 from "./rectangle3.png"
+    import  about  from "./about.png"
+    import vector from "./vector.png"
+    import vector1 from "./vector.png"
 
-    export {line1,line2,errorNotFound,signin,signup,Google,facebook,checked,errorimg,FaStore,Instagram,X,LikedIn,Facebook1}
+
+
+    export {line1,line2,errorNotFound,signin,signup,Google,facebook,checked,errorimg,FaStore,Instagram,X,LikedIn,Facebook1,ellipse,chevronLeft,arrowright,rectangle,rectangle1,rectangle3,about,vector,vector1}

@@ -1,10 +1,10 @@
 import React from 'react'
-import { facebook, Facebook1, FaStore, Instagram, LikedIn, X } from '../../../public/Assets/exporting'
+import { Facebook1, FaStore, Instagram, LikedIn, X } from '../../../public/Assets/exporting'
 
 const Footer = () => {
   return (
     <>
-     <footer className=" bg-purple-100 text-gray-700 p-8 px-20">
+     <footer className=" mt-5 bg-purple-100 text-gray-700 p-8 px-20">
       <div className=" md:text-center container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6 text-right">
         {/* معلومات المتجر */}
         <div className=' md:text-right'>
