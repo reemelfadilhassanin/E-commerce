@@ -1,40 +1,56 @@
-import Slider from "../components/ui/Slider";
+import Slider from '../components/ui/Slider';
 import {
   homing1,
   homing2,
   homing3,
   homing4,
   homing5,
-} from "../../public/Assets/exporting";
-import Product from "../components/ui/Product";
-import Filter from "../components/ui/Filter";
-import SectionTitle from "../components/ui/SectionTitle";
-import { useEffect, useState } from "react";
-import SmallDeviceFilter from "../components/ui/SmallDeviceFilter";
-import UseGetElementForHomePage from "../components/hooks/UseGetElementForHomePage";
-import ErrorHandler from "../components/ui/useError";
-import SkeletonLoadnig from "../components/ui/SkeletonLoadnig";
-import SkeleyonFilterLoading from "../components/ui/skeleyonFilterLoading";
-function OriginHome() {
-  const { mutate, isLoading, error, onError } = UseGetElementForHomePage();
-    const [data, setData] = useState([]);
+} from '../../public/Assets/exporting';
+import Product from '../components/ui/Product';
+import Filter from '../components/ui/Filter';
+import SectionTitle from '../components/ui/SectionTitle';
+import { useEffect, useState } from 'react';
+import SmallDeviceFilter from '../components/ui/SmallDeviceFilter';
+import UseGetElementForHomePage from '../components/hooks/UseGetElementForHomePage';
+import ErrorHandler from '../components/ui/useError';
+import SkeletonLoadnig from '../components/ui/SkeletonLoadnig';
+import SkeleyonFilterLoading from '../components/ui/skeleyonFilterLoading';
 
-  useEffect(() => {
-  const fetchData =  mutate();
-  setData(fetchData);
-  }, []);
+function OriginHome() {
+  const onError = (error) => {
+    console.log('Error:', error);
+    // Handle the error here (for example, show a message or notification)
+  };
+
+  // Pass onError function to the hook
+  const { mutate, isLoading, error, data } = UseGetElementForHomePage({
+    onError,
+  });
 
   const [openFilter, setOpenFilter] = useState(false);
+
+  // Use useEffect to trigger the mutation when the component is mounted
+  useEffect(() => {
+    if (mutate) {
+      mutate();
+    }
+  }, [mutate]);
+
+  useEffect(() => {
+    // You can also directly use the data without the need to setState
+  }, [data]); // No need to explicitly set data to state if you can use it directly
+
   return (
     <div className="relative">
-      <>{onError && <ErrorHandler error={error} />}</>
+      {/* Show error handler if there's an error */}
+      {error && <ErrorHandler error={error} />}
       <Slider />
       <div className="container border-t-[1px] border-[#F3EAF3]">
         <div className="z-[100] bg-white p-2 flex max-sm:justify-between justify-center items-center ">
           <p
             onClick={() => {
-              if(isLoading){
-                setOpenFilter(true)
+              if (isLoading) {
+                setOpenFilter(true);
               }
             }}
             className="w-[30px] hidden max-sm:block cursor-pointer bg-red-900"
@@ -43,7 +59,7 @@ function OriginHome() {
           </p>
           <div
             className={`${
-              openFilter ? "" : "hidden"
+              openFilter ? '' : 'hidden'
             } min-sm:hidden max-sm:absolute`}
           >
             <SmallDeviceFilter close={setOpenFilter} />
@@ -51,16 +67,17 @@ function OriginHome() {
           <SectionTitle title="الأكثر مبيعاً" />
           <div className="w-[30px] h-full"></div>
         </div>
+
+        {/* Show skeleton loading when isLoading is true */}
         {isLoading ? (
           <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-sm:grid-cols-2 animate-pulse">
-          <SkeleyonFilterLoading/>
+            <SkeleyonFilterLoading />
             <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
-
-            {Array(6)
-              .fill(1)
-              .map((_, index) => (
-                <SkeletonLoadnig key={index} />
-              ))}
+              {Array(6)
+                .fill(1)
+                .map((_, index) => (
+                  <SkeletonLoadnig key={index} />
+                ))}
             </div>
           </div>
         ) : (
@@ -69,15 +86,16 @@ function OriginHome() {
               <Filter />
             </div>
             <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
-              {data.map((item, index) => (
+              {/* Display product data */}
+              {data?.products?.map((item, index) => (
                 <Product img={item} key={index} />
               ))}
             </div>
           </div>
         )}
-        <SectionTitle title={"منتجات مميزة"} />
+        <SectionTitle title={'منتجات مميزة'} />
         <div className="flex h-auto gap-2 max-sm:flex-col max-sm:h-auto">
-          {/* العمود الأول */}
+          {/* Column 1 */}
           <div className="flex flex-col gap-2 w-1/5 max-sm:w-full max-sm:flex-row">
             <div className="relative flex-1">
               <img
@@ -93,7 +111,7 @@ function OriginHome() {
             </div>
           </div>
 
-          {/* الصورة المركزية */}
+          {/* Central image */}
           <div className="flex-1 relative">
             <img
               src={homing1}
@@ -101,7 +119,7 @@ function OriginHome() {
             />
           </div>
 
-          {/* العمود الأخير */}
+          {/* Column 3 */}
           <div className="flex flex-col gap-2 w-1/5 max-sm:w-full max-sm:flex-row">
             <div className="relative flex-1">
               <img

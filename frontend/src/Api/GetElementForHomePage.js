@@ -1,6 +1,6 @@
 const GetElementForHomePage = async () => {
     try{
-        const res = await fetch("but your api here",{
+        const res = await fetch("http://localhost:5000/api/admin/best-sellers",{
             method:"GET",
             header:{
                 "Content-Type" : "application/json"

@@ -19,7 +19,7 @@ const AddProduct = async (dataOfProduct) => {
     formData.append('price', price);
 
     
-    const state = dataOfProduct.state === 'instock' ? 'instock' : 'outofstock';
+    const state = dataOfProduct.state === 'متوفر' ? 'متوفر' : 'غير متوفر';
     formData.append('state', state);
 
     formData.append('description', dataOfProduct.description);

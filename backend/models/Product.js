@@ -14,11 +14,16 @@ const ProductSchema = new mongoose.Schema(
       },
     },
     price: { type: Number, required: true },
-    state: {
+    state: { type: String, enum: ['متوفر', 'غير متوفر'], required: true },
+    soldCount: { type: Number, default: 0 },
+
+    isFeatured: {
       type: Boolean,
-      default: true,
+      default: true, // Set to true to mark a product as featured
     },
   },
+
   { timestamps: true }
 );
+
 export default mongoose.model('Product', ProductSchema);

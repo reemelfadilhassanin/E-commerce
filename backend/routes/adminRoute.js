@@ -31,68 +31,139 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }); // Initialize multer with the storage configuration
 
 // Route to add a new product (with file upload support)
-router.post(
-  '/add',
-  upload.single('image'), 
-  async (req, res) => {
-    console.log('Session Data:', req.session);
-    console.log('Request Body:', req.body);
-    console.log('Uploaded File:', req.file);
+router.post('/add', upload.single('image'), async (req, res) => {
+  console.log('Session Data:', req.session);
+  console.log('Request Body:', req.body);
+  console.log('Uploaded File:', req.file);
 
-    const { name, type, price, state, description } = req.body;
+  const { name, type, price, state, description } = req.body;
 
-    const parsedPrice = parseFloat(price);
-    if (isNaN(parsedPrice)) {
-      return res.status(400).json({ message: 'Price must be a valid number.' });
-    }
-
-    const parsedState = state === 'instock'; 
-    if (typeof parsedState !== 'boolean') {
-      return res.status(400).json({ message: 'State must be a valid boolean value.' });
-    }
-
-    let parsedType = type;
-    if (typeof type === 'string') {
-      parsedType = type.split(','); 
-    }
-
-    if (!Array.isArray(parsedType) || parsedType.length === 0) {
-      return res.status(400).json({ message: 'Type must be an array of values.' });
-    }
-
-    if (!name || !description || !parsedPrice || !parsedState || !parsedType || !req.file) {
-      return res.status(400).json({ message: 'All fields are required.' });
-    }
-
-    const image = req.file ? req.file.path : null;
-
-    try {
-      const newProduct = new Product({
-        name,
-        description,
-        price: parsedPrice,
-        type: parsedType,
-        state: parsedState,
-        image,
-      });
-
-      await newProduct.save();
-
-      return res.status(201).json({
-        message: 'Product added successfully!',
-        product: newProduct,
-      });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({
-        message: 'Something went wrong while adding the product.',
-        error: err.message,
-      });
-    }
+  // Parse price to a float
+  const parsedPrice = parseFloat(price);
+  if (isNaN(parsedPrice)) {
+    return res.status(400).json({ message: 'Price must be a valid number.' });
   }
-);
 
+  // Validate state value (should be either 'متوفر' or 'غير متوفر')
+  const validStates = ['متوفر', 'غير متوفر'];
+  if (!validStates.includes(state)) {
+    return res
+      .status(400)
+      .json({ message: 'State must be either "متوفر" or "غير متوفر".' });
+  }
 
+  // Process type
+  let parsedType = type;
+  if (typeof type === 'string') {
+    parsedType = type.split(',');
+  }
+
+  if (!Array.isArray(parsedType) || parsedType.length === 0) {
+    return res
+      .status(400)
+      .json({ message: 'Type must be an array of values.' });
+  }
+
+  // Ensure all required fields are present
+  if (
+    !name ||
+    !description ||
+    !parsedPrice ||
+    !state ||
+    !parsedType ||
+    !req.file
+  ) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  const image = req.file ? req.file.path : null;
+
+  try {
+    // Create and save new product
+    const newProduct = new Product({
+      name,
+      description,
+      price: parsedPrice,
+      type: parsedType,
+      state, // Store the state as 'متوفر' or 'غير متوفر'
+      image,
+    });
+
+    await newProduct.save();
+
+    return res.status(201).json({
+      message: 'Product added successfully!',
+      product: newProduct,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: 'Something went wrong while adding the product.',
+      error: err.message,
+    });
+  }
+});
+
+router.get('/best-sellers', async (req, res) => {
+  const { type, priceRange } = req.query;
+
+  try {
+    // Initialize filter conditions
+    let filterConditions = {};
+
+    // Apply 'type' filter if provided
+    if (type) {
+      filterConditions.type = { $in: type.split(',') }; // type is expected as a comma-separated string
+    }
+
+    // Apply 'price' filter based on the priceRange query parameter
+    if (priceRange) {
+      if (priceRange === 'less-than-100') {
+        filterConditions.price = { $lt: 100 }; // Less than $100
+      } else if (priceRange === '100-to-300') {
+        filterConditions.price = { $gte: 100, $lte: 300 }; // From $100 to $300
+      } else if (priceRange === 'more-than-3000') {
+        filterConditions.price = { $gt: 3000 }; // More than $3000
+      }
+      // If no 'priceRange' is specified, it will return all price ranges
+    }
+
+    // Fetch the best-sellers based on the filter conditions
+    const bestSellers = await Product.find(filterConditions)
+      .sort({ soldCount: -1 }) // Sort by soldCount in descending order (most sold first)
+      .limit(10); // Limit to the top 10 best-sellers
+
+    return res.status(200).json({
+      message: 'Best sellers fetched successfully!',
+      products: bestSellers,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: 'Something went wrong while fetching the best sellers.',
+      error: err.message,
+    });
+  }
+});
+
+router.get('/featured-products', async (req, res) => {
+  try {
+    const featuredProducts = await Product.find({ isFeatured: true })
+      .limit(10)
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: 'Featured products fetched successfully!',
+      products: featuredProducts,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: 'Something went wrong while fetching featured products.',
+      error: err.message,
+    });
+  }
+});
 
 // Get all products
 router.get('/products', verifyToken, verifyAdmin, async (req, res) => {

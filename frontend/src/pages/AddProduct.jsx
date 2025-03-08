@@ -19,7 +19,7 @@ function AddProduct() {
         state: '',
         description: '',
         image: null,
-      }); 
+      });
     },
     onError: (message, errorMessage) => {
       console.log(message, errorMessage);
@@ -47,10 +47,10 @@ function AddProduct() {
         setUrlImg(url);
       } else {
         alert('الرجاء اختيار صورة بتنسيق PNG أو JPG.');
-        setUrlImg(''); 
+        setUrlImg('');
       }
     } else {
-      setUrlImg(''); 
+      setUrlImg('');
     }
   };
 
@@ -81,8 +81,7 @@ function AddProduct() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-  
-    
+
     if (
       !formData.name ||
       !formData.description ||
@@ -94,7 +93,7 @@ function AddProduct() {
       alert('جميع الحقول مطلوبة');
       return;
     }
-  
+
     const formDataToSubmit = {
       name: formData.name,
       description: formData.description,
@@ -103,16 +102,16 @@ function AddProduct() {
       type: formData.type.split(','),
       image: formData.image, // Ensure the image is handled correctly
     };
-  
+
     console.log('Submitting form data:', formDataToSubmit);
-  
+
     try {
-      await mutate(formDataToSubmit);  // Use mutate with the JSON data
+      await mutate(formDataToSubmit); // Use mutate with the JSON data
     } catch (error) {
       console.error('Error adding product:', error);
     }
   };
-  
+
   return (
     <>
       {erroring && (
@@ -120,7 +119,10 @@ function AddProduct() {
       )}
       {success && <UseSuccess signworld="تم اضافة المنتج" />}
 
-      <form className="w-full min-h-[calc(100vh-10rem)]" onSubmit={submitHandler}>
+      <form
+        className="w-full min-h-[calc(100vh-10rem)]"
+        onSubmit={submitHandler}
+      >
         <div className="grid grid-cols-5 max-sm:grid-cols-1 gap-4">
           <div className="sm:col-span-2 xl:col-span-2">
             <div className="p-4 w-full h-fit rounded-xl shadow-[1px_0px_20px_rgba(0,0,0,0.2),-4px_0px_10px_rgba(0,0,0,0.2)] bg-white text-black">
@@ -166,8 +168,8 @@ function AddProduct() {
                   id="price"
                   name="state"
                 >
-                  <option value="instock">متوفر</option>
-                  <option value="outstock">غير متوفر</option>
+                  <option value="غير متوفر">غير متوفر</option>
+                  <option value="متوفر">متوفر</option>
                 </select>
               </div>
               <div className="flex flex-col gap-2">
