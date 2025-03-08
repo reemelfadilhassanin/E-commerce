@@ -19,7 +19,11 @@ const AddProduct = async (dataOfProduct) => {
     formData.append('price', price);
 
     
-    const state = dataOfProduct.state === 'متوفر' ? 'متوفر' : 'غير متوفر';
+    //const state = dataOfProduct.state === 'متوفر' ? 'متوفر' : 'غير متوفر';
+    const state = ['متوفر', 'غير متوفر'].includes(dataOfProduct.state) 
+    ? dataOfProduct.state 
+    : 'غير متوفر';
+
     formData.append('state', state);
 
     formData.append('description', dataOfProduct.description);
