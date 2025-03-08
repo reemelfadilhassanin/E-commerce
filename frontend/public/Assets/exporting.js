@@ -66,6 +66,4 @@ export {
   rectangle1,
   rectangle3,
   about,
-  vector,
-  vector1,
 };

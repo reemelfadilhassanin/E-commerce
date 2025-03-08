@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router';
 import Slider from '../components/ui/Slider';
 import {
   homing1,
@@ -6,7 +6,6 @@ import {
   homing3,
   homing4,
   homing5,
-
 } from "../../public/Assets/exporting";
 import Product from "../components/ui/Product";
 import Filter from "../components/ui/Filter";
@@ -33,7 +32,7 @@ function OriginHome() {
 
   return (
     <div className="relative">
-      {error && <ErrorHandler error={error} />}
+      {/* {error && <ErrorHandler error={error} />}  */}
       <Slider />
       <div className="container border-t-[1px] border-[#F3EAF3]">
         <div className="z-[100] bg-white p-2 flex max-sm:justify-between justify-center items-center ">
@@ -76,9 +75,9 @@ function OriginHome() {
               <Filter GetDataFromFilter={setFiltaringData} />
             </div>
             <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
-              {dataAfterFetch.map((item, index) => (
+              {/* {dataAfterFetch.map((item, index) => (
                 <Product id={item.id} img={item} key={index} />
-              ))}
+              ))} */}
             </div>
           </div>
         )}
@@ -125,9 +124,6 @@ function OriginHome() {
           </div>
         </div>
       </div>
-
-import { Link } from "react-router"
-
     </div>
   );
 }
