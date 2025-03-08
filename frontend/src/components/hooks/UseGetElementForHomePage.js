@@ -1,16 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import GetElementForHomePage from "../../Api/GetElementForHomePage";
-function UseGetElementForHomePage({ onError }) {
-  return useMutation({
-    mutationFn: GetElementForHomePage,
-
-    onError: onError((error) => {
-      console.log(error);
-      if (error) {
-        onError(error);
-      }
-    }),
+function UseGetElementForHomePage(filter) {
+  return useQuery({
+    queryKey: ['Get Filter Data', filter], 
+    queryFn: () => GetElementForHomePage(filter),
   });
 }
+
 
 export default UseGetElementForHomePage;

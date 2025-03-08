@@ -1,7 +1,23 @@
 import { useState } from "react";
 
-function SmallDeviceFilter({ close }) {
+function SmallDeviceFilter({ close,GetDataFromFilter }) {
   const [openIndex, setOpenIndex] = useState(-1);
+  const [filter,setFilter] = useState({type:"any",price:"any"})
+
+  const handelinput = (e) => {
+    const {name, value} = e.target;
+    setFilter((prev)=>({
+      ...prev,
+      [name]: value,
+    }))
+    console.log(filter)
+    close(false)
+    GetDataFromFilter(filter);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
 
   const handleClose = (e) => {
     e.stopPropagation();
@@ -25,7 +41,7 @@ function SmallDeviceFilter({ close }) {
       </div>
 
       {/* محتوى الفلتر */}
-      <div className="shadow w-[200px] rounded-md absolute z-[100] bg-white top-[40px] right-[6%] flex justify-center gap-2 flex-col py-4  text-[#636B6A]">
+      <form onSubmit={e=>handleSubmit(e)} className="shadow w-[200px] rounded-md absolute z-[100] bg-white top-[40px] right-[6%] flex justify-center gap-2 flex-col py-4  text-[#636B6A]">
         <div className="px-4 flex justify-center flex-col gap-1">
           {[
             {
@@ -69,7 +85,9 @@ function SmallDeviceFilter({ close }) {
                     <input
                       type="radio"
                       id={`${item.name}-${subItem}`}
-                      name={item.name}
+                      name="type"
+                      value={`${item.name}-${subItem}`} 
+                      onChange={e=>handelinput(e)}
                       className="hidden"
                       defaultChecked={subIndex === 0}
                     />
@@ -107,6 +125,8 @@ function SmallDeviceFilter({ close }) {
                   type="radio"
                   id={`price-${priceIndex}`}
                   name="price"
+                  value={price}
+                  onChange={e=>handelinput(e)}
                   className="appearance-none w-5 h-5 border-4 border-gray-400 rounded-full checked:border-[#7B1D81]"
                   defaultChecked={priceIndex === 0}
                 />
@@ -120,7 +140,7 @@ function SmallDeviceFilter({ close }) {
             ))
           )}
         </div>
-      </div>
+      </form>
     </>
   );
 }

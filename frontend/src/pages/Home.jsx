@@ -16,13 +16,19 @@ import ErrorHandler from "../components/ui/useError";
 import SkeletonLoadnig from "../components/ui/SkeletonLoadnig";
 import SkeleyonFilterLoading from "../components/ui/skeleyonFilterLoading";
 function OriginHome() {
-  const { mutate, isLoading, error, onError } = UseGetElementForHomePage();
-    const [data, setData] = useState([]);
+  const [filtaringData,setFiltaringData] = useState({type:"any",price:"any"});
 
-  useEffect(() => {
-  const fetchData =  mutate();
-  setData(fetchData);
-  }, []);
+  console.log(filtaringData)
+  const { data, isLoading, error, onError } = UseGetElementForHomePage(filtaringData);
+    const [dataAfterFetch, setDataAfterFetch] = useState([]);
+
+    useEffect(() => {
+      if (data) {
+        setDataAfterFetch(data); 
+      }
+    }, [data]); 
+    
+  
 
   const [openFilter, setOpenFilter] = useState(false);
   return (
@@ -46,7 +52,7 @@ function OriginHome() {
               openFilter ? "" : "hidden"
             } min-sm:hidden max-sm:absolute`}
           >
-            <SmallDeviceFilter close={setOpenFilter} />
+            <SmallDeviceFilter close={setOpenFilter} GetDataFromFilter = {setFiltaringData} />
           </div>
           <SectionTitle title="الأكثر مبيعاً" />
           <div className="w-[30px] h-full"></div>
@@ -66,10 +72,10 @@ function OriginHome() {
         ) : (
           <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3">
             <div className="relative max-sm:hidden">
-              <Filter />
+              <Filter GetDataFromFilter={setFiltaringData} />
             </div>
             <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
-              {data.map((item, index) => (
+              {dataAfterFetch.map((item, index) => (
                 <Product img={item} key={index} />
               ))}
             </div>
