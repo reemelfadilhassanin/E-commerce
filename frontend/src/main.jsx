@@ -26,7 +26,7 @@ import {
   OrderManagement,
   UserManagement,
 } from "./pages/exporting";
-
+import Product from "./pages/Product";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -44,6 +44,9 @@ const router = createBrowserRouter([
       },{
         path:"offers",
         element:<Offers/>,
+      },{
+        path:":id",
+        element:<Product/>,
       }
     ]
   },

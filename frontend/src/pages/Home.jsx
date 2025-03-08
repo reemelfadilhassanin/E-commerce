@@ -77,7 +77,7 @@ function OriginHome() {
             </div>
             <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
               {dataAfterFetch.map((item, index) => (
-                <Product img={item} key={index} />
+                <Product id={item.id} img={item} key={index} />
               ))}
             </div>
           </div>
