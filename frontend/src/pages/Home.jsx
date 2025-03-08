@@ -1,3 +1,4 @@
+
 import Slider from '../components/ui/Slider';
 import {
   homing1,
@@ -124,6 +125,9 @@ function OriginHome() {
           </div>
         </div>
       </div>
+
+import { Link } from "react-router"
+
     </div>
   );
 }

@@ -1,4 +1,5 @@
 
+
 import line1 from "./line1.svg";
 import line2 from "./line2.svg";
 import errorNotFound from "./error-404.svg";
@@ -20,6 +21,18 @@ import homing2 from "./homing2.png";
 import homing3 from "./homing3.png";
 import homing4 from "./homing4.png";
 import homing5 from "./homing5.png";
+import FaStore from "./FaStore.png"
+    import Instagram from "./Instagram.png"
+    import X from "./X.png"
+    import LikedIn from "./LinkedIn.png"
+    import Facebook1 from "./Facebook1.png"
+    import ellipse from "./ellipse.png"
+    import chevronLeft  from "./chevronLeft.png"
+    import arrowright from "./arrowright.png"
+    import rectangle from "./rectangle.png"
+    import rectangle1 from "./rectangle1.png"
+    import rectangle3 from "./rectangle3.png"
+    import  about  from "./about.png"
 export {
   line1,
   line2,
@@ -42,4 +55,17 @@ export {
   homing3,
   homing4,
   homing5,
+  FaStore,
+  Instagram,
+  X,LikedIn,
+  Facebook1,
+  ellipse,
+  chevronLeft,
+  arrowright,
+  rectangle,
+  rectangle1,
+  rectangle3,
+  about,
+  vector,
+  vector1,
 };
