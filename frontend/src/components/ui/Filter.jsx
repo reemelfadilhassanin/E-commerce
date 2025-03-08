@@ -1,10 +1,25 @@
 import { useState } from "react";
 
-const Filter = () => {
+const Filter = ({GetDataFromFilter}) => {
   const [openIndex, setOpenIndex] = useState(0);
-  
+  const [filter,setFilter] = useState({type:"any",price:"any"})
+
+  const handelinput = (e) => {
+    const {name, value} = e.target;
+    setFilter((prev)=>({
+      ...prev,
+      [name]: value,
+    }))
+    console.log(filter)
+    GetDataFromFilter(filter);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
+
   return (
-    <div className="shadow rounded-md sticky top-4 flex justify-center gap-2 flex-col pb-3">
+    <form onSubmit={e => handleSubmit(e)} className="shadow rounded-md sticky top-4 flex justify-center gap-2 flex-col pb-3">
       <div className="px-4 flex justify-center flex-col gap-1">
         <div className="flex justify-between items-center border-b-[1px] border-[#0000001A] py-2 mb-2">
           <p>فلترة</p>
@@ -54,9 +69,11 @@ const Filter = () => {
                   <input
                     type="radio"
                     id={`${item.name}-${subItem}`}
-                    name={item.name}
+                    name="type"
+                    onChange={e=>handelinput(e)}
                     className="appearance-none w-5 h-5 border-4 border-gray-400 rounded-full checked:border-[#7B1D81]"
-                    defaultChecked={subIndex === 0} 
+                    defaultChecked={subIndex === 0}
+                    value={`${item.name}-${subItem}`} 
                   />
                   <label
                     htmlFor={`${item.name}-${subItem}`}
@@ -90,6 +107,8 @@ const Filter = () => {
                 type="radio"
                 id={`price-${priceIndex}`}
                 name="price"
+                value={price} 
+                onChange={e=>handelinput(e)}
                 className="appearance-none w-5 h-5 border-4 border-gray-400 rounded-full checked:border-[#7B1D81]"
                 defaultChecked={priceIndex === 0}
               />
@@ -103,7 +122,7 @@ const Filter = () => {
           ))
         )}
       </div>
-    </div>
+    </form>
   );
 };
 

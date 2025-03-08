@@ -5,44 +5,33 @@ import {
   homing3,
   homing4,
   homing5,
-} from '../../public/Assets/exporting';
-import Product from '../components/ui/Product';
-import Filter from '../components/ui/Filter';
-import SectionTitle from '../components/ui/SectionTitle';
-import { useEffect, useState } from 'react';
-import SmallDeviceFilter from '../components/ui/SmallDeviceFilter';
-import UseGetElementForHomePage from '../components/hooks/UseGetElementForHomePage';
-import ErrorHandler from '../components/ui/useError';
-import SkeletonLoadnig from '../components/ui/SkeletonLoadnig';
-import SkeleyonFilterLoading from '../components/ui/skeleyonFilterLoading';
 
+} from "../../public/Assets/exporting";
+import Product from "../components/ui/Product";
+import Filter from "../components/ui/Filter";
+import SectionTitle from "../components/ui/SectionTitle";
+import { useEffect, useState } from "react";
+import SmallDeviceFilter from "../components/ui/SmallDeviceFilter";
+import UseGetElementForHomePage from "../components/hooks/UseGetElementForHomePage";
+import ErrorHandler from "../components/ui/useError";
+import SkeletonLoadnig from "../components/ui/SkeletonLoadnig";
+import SkeleyonFilterLoading from "../components/ui/skeleyonFilterLoading";
 function OriginHome() {
-  const onError = (error) => {
-    console.log('Error:', error);
-    // Handle the error here (for example, show a message or notification)
-  };
+  const [filtaringData,setFiltaringData] = useState({type:"any",price:"any"});
 
-  // Pass onError function to the hook
-  const { mutate, isLoading, error, data } = UseGetElementForHomePage({
-    onError,
-  });
+  console.log(filtaringData)
+  const { data, isLoading, error, onError } = UseGetElementForHomePage(filtaringData);
+    const [dataAfterFetch, setDataAfterFetch] = useState([]);
 
+    useEffect(() => {
+      if (data) {
+        setDataAfterFetch(data); 
+      }
+    }, [data]); 
   const [openFilter, setOpenFilter] = useState(false);
-
-  // Use useEffect to trigger the mutation when the component is mounted
-  useEffect(() => {
-    if (mutate) {
-      mutate();
-    }
-  }, [mutate]);
-
-  useEffect(() => {
-    // You can also directly use the data without the need to setState
-  }, [data]); // No need to explicitly set data to state if you can use it directly
 
   return (
     <div className="relative">
-      {/* Show error handler if there's an error */}
       {error && <ErrorHandler error={error} />}
       <Slider />
       <div className="container border-t-[1px] border-[#F3EAF3]">
@@ -62,7 +51,7 @@ function OriginHome() {
               openFilter ? '' : 'hidden'
             } min-sm:hidden max-sm:absolute`}
           >
-            <SmallDeviceFilter close={setOpenFilter} />
+            <SmallDeviceFilter close={setOpenFilter} GetDataFromFilter = {setFiltaringData} />
           </div>
           <SectionTitle title="الأكثر مبيعاً" />
           <div className="w-[30px] h-full"></div>
@@ -83,11 +72,10 @@ function OriginHome() {
         ) : (
           <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-3">
             <div className="relative max-sm:hidden">
-              <Filter />
+              <Filter GetDataFromFilter={setFiltaringData} />
             </div>
             <div className="grid col-span-3 grid-cols-3 max-lg:grid-cols-2 gap-4 max-lg:col-span-2 max-md:grid-cols-1 max-sm:col-span-3 max-sm:grid-cols-2">
-              {/* Display product data */}
-              {data?.products?.map((item, index) => (
+              {dataAfterFetch.map((item, index) => (
                 <Product img={item} key={index} />
               ))}
             </div>
